@@ -14,6 +14,8 @@ Execute it
 
 Restart your shell and you should be good to go!
 
+**Note**: The installation process adds 2 new lines to the end of your `.bashrc/.zshrc` file
+
 ## Usage
 
 * `pvem install [python-version]` - Installs a specific python version. Note that pvem doesn't use the globally installed python versions in your system, so if you have one installed and want to use it, you'll still need to install it through this command. Examples: `pvem install 3.11` or `pvem install 3.11.4`
