@@ -25,3 +25,14 @@ Restart your shell and you should be good to go!
 * `pvem versions` - Lists all installed python versions
 * `pvem delete [env-name]` - Deletes the specified virtual environment
 * `pvem uninstall [python-version]` - Uninstalls a specific python version
+* `deactivate` - Default linux command to leave a virtual environment
+
+## How it works
+
+In the installation folder there will be 3 things:
+
+* A file `pvem.sh` which is sourced into your shell on startup. It has the logic of the software
+* A folder `versions` which will store all the locally installed python versions pvem will use
+* A folder `envs` which will store all the virtual environments created through pvem
+
+So the idea is pretty simple, install your python versions locally in the `versions` folder using the `pvem install` command and manage the environments in the `envs` folder using the specified installed python version with the `pvem new` and `pvem use` command.
