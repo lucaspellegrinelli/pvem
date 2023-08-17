@@ -197,6 +197,15 @@ pvem_uninstall() {
         return 1
     fi
 
+    # Find all virtual envirorments that use the python version
+    envs=$(ls "$ENVPATH" | xargs -I {} grep -l "$1" "$ENVPATH/{}/pyvenv.cfg")
+
+    # Loop through all virtual envirorments that use the python version
+    # and delete them
+    for env in $envs; do
+        rm -rf $(dirname "$env")
+    done
+
     # Delete python version
     rm -rf "$VERSIONPATH/$1"
 }
