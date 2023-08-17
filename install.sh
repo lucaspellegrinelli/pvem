@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ ! -f pvem.sh ]; then
+    echo "pvem.sh not found. Downloading from GitHub..."
+    wget -q https://raw.githubusercontent.com/lucaspellegrinelli/pvem/main/pvem.sh
+fi
+
 INSTALL_PATH="${HOME}/.pvem"
 
 read -p "Enter installation path [${INSTALL_PATH}]: " user_path
