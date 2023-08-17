@@ -269,7 +269,16 @@ pvem() {
             pvem_versions
             ;;
         *)
-            echo "Usage: pvem [new|install|use|delete|uninstall|list|versions] <arguments>"
+            echo "Usage: pvem <function> <arguments>"
+            echo "Functions:"
+            printf "  %-10s %-25s %s\n" "new" "<name> <python version>" "Create a new virtual environment"
+            printf "  %-10s %-25s %s\n" "install" "<python version>" "Install a python version"
+            printf "  %-10s %-25s %s\n" "use" "<name>" "Activate a virtual environment"
+            printf "  %-10s %-25s %s\n" "delete" "<name>" "Delete a virtual environment"
+            printf "  %-10s %-25s %s\n" "uninstall" "<python version>" "Uninstall a python version"
+            printf "  %-10s %-25s %s\n" "list" "" "List all available virtual environments"
+            printf "  %-10s %-25s %s\n" "versions" "" "List all installed python versions"
+            printf "  %-10s %-25s %s\n" "help" "" "Show this help message"
             return 1
             ;;
     esac
