@@ -1,6 +1,5 @@
-export INSTALLPATH="/home/lucas/projects/venv-test"
-ENVPATH="$INSTALLPATH/envs"
-VERSIONPATH="$INSTALLPATH/versions"
+ENVPATH="$PVEMPATH/envs"
+VERSIONPATH="$PVEMPATH/versions"
 
 pvem_new() {
     # Create a new virtual envirorment
@@ -230,7 +229,7 @@ pvem() {
             pvem_versions
             ;;
         *)
-            echo "Usage: pvem [create|install|use|delete|uninstall|list] <arguments>"
+            echo "Usage: pvem [new|install|use|delete|uninstall|list|versions] <arguments>"
             return 1
             ;;
     esac
