@@ -1,8 +1,10 @@
-# Python Version and virtual Environment Manager
+# Python Version and Virtual Environment Manager
 
 This is a tool to manage locally installed python versions and barebones (`python -m venv [env]`) virtual environments using the managed versions.
 
 ## Installation
+
+### Linux / macOS
 
 Download the installation file
 
@@ -15,6 +17,10 @@ Execute it
 Restart your shell and you should be good to go!
 
 **Note**: The installation process adds 2 new lines to the end of your `.bashrc/.zshrc` file
+
+### Windows
+
+Not supported
 
 ## Usage
 
