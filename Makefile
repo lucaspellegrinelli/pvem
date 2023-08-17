@@ -7,6 +7,16 @@ install:
 	fi; \
 	mkdir -p $(INSTALL_PATH); \
 	cp pvem.sh $(INSTALL_PATH)/pvem.sh; \
-	echo "pvem.sh has been installed to $(INSTALL_PATH)"; \
-	echo "Please add the following line to your .bashrc or .zshrc:"; \
-	echo "source $(INSTALL_PATH)/pvem.sh"
+	if ! grep -q "export PVEM_PATH=$(INSTALL_PATH)" $(HOME)/.bashrc; then \
+		echo "export PVEM_PATH=$(INSTALL_PATH)" >> $(HOME)/.bashrc; \
+	fi; \
+	if ! grep -q "source $(INSTALL_PATH)/pvem.sh" $(HOME)/.bashrc; then \
+		echo "source $(INSTALL_PATH)/pvem.sh" >> $(HOME)/.bashrc; \
+	fi; \
+	if ! grep -q "export PVEM_PATH=$(INSTALL_PATH)" $(HOME)/.zshrc; then \
+		echo "export PVEM_PATH=$(INSTALL_PATH)" >> $(HOME)/.zshrc; \
+	fi; \
+	if ! grep -q "source $(INSTALL_PATH)/pvem.sh" $(HOME)/.zshrc; then \
+		echo "source $(INSTALL_PATH)/pvem.sh" >> $(HOME)/.zshrc; \
+	fi; \
+	echo "pvem.sh has been installed to $(INSTALL_PATH)";

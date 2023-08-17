@@ -1,5 +1,26 @@
-ENVPATH="$PVEMPATH/envs"
-VERSIONPATH="$PVEMPATH/versions"
+# If PVEM_PATH is not set, set it to ~/.pvem
+if [ -z "$PVEM_PATH" ]; then
+    PVEM_PATH="$HOME/.pvem"
+fi
+
+# If the directory does not exist, raise an error
+if ! [ -d "$PVEM_PATH" ]; then
+    echo "Error: PVEM_PATH is not set to a valid directory"
+    return 1
+fi
+
+ENVPATH="$PVEM_PATH/envs"
+VERSIONPATH="$PVEM_PATH/versions"
+
+# If the envs directory does not exist, create it
+if ! [ -d "$ENVPATH" ]; then
+    mkdir -p "$ENVPATH"
+fi
+
+# If the versions directory does not exist, create it
+if ! [ -d "$VERSIONPATH" ]; then
+    mkdir -p "$VERSIONPATH"
+fi
 
 pvem_new() {
     # Create a new virtual envirorment
@@ -184,12 +205,22 @@ pvem_list() {
     # List all available virtual envirorments
     # Usage: pvem list
 
+    # If the virtual envirorments directory does not exist, return
+    if ! [ -d "$ENVPATH" ]; then
+        return 1
+    fi
+
     ls "$ENVPATH"
 }
 
 pvem_versions() {
     # List all installed python versions
     # Usage: pvem versions
+
+    # If the versions directory does not exist, return
+    if ! [ -d "$VERSIONPATH" ]; then
+        return 1
+    fi
 
     ls "$VERSIONPATH"
 }
