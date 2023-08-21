@@ -4,6 +4,10 @@ This is a tool to manage locally installed python versions and barebones (`pytho
 
 ## Installation
 
+There are some requirements (mainly zlib) which can be installed (in debian based linux distros) with
+
+```apt-get install -y curl wget make gcc zlib1g-dev```
+
 Download the installation file
 
 ```wget https://raw.githubusercontent.com/lucaspellegrinelli/pvem/main/install.sh```

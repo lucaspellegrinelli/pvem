@@ -1,7 +1,8 @@
 FROM ubuntu
 
-# Install dependencies (curl)
-RUN apt-get update && apt-get install -y curl
+# Install dependencies
+RUN apt-get update
+RUN apt-get install -y curl wget make gcc zlib1g-dev
 
 # Copy files
 COPY . .

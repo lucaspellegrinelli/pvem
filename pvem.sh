@@ -34,32 +34,35 @@ pvem_new() {
         return 1
     fi
 
+    env_name=$1
+    python_version=$2
+
     # Check if python version looks like a version (X, X.X, X.X.X)
-    if ! [[ "$2" =~ ^[0-9]+(\.[0-9]+){0,2}$ ]]; then
-        echo "Error: Python version $2 is not a valid version"
+    if ! [[ "$python_version" =~ ^[0-9]+(\.[0-9]+){0,2}$ ]]; then
+        echo "Error: Python version $python_version is not a valid version"
         return 1
     fi
 
     # Search the versions directory for the latest version that starts with
     # the given version
-    version=$(ls "$VERSIONPATH" | grep -E "^$2\." | sort -V | tail -n 1)
+    version=$(ls "$VERSIONPATH" | grep -E "^$python_version\." | sort -V | tail -n 1)
 
     # If no version was found, return
     if [ -z "$version" ]; then
-        echo "Error: Python version $2 is not installed. Install it with pvem install $2"
+        echo "Error: Python version $python_version is not installed. Install it with pvem install $python_version"
         return 1
     fi
 
-    2=$version
+    python_version=$version
 
     # Check if virtual envirorment already exists
-    if [ -d "$ENVPATH/$1" ]; then
-        echo "Error: Virtual envirorment $1 already exists"
+    if [ -d "$ENVPATH/$env_name" ]; then
+        echo "Error: Virtual envirorment $env_name already exists"
         return 1
     fi
 
     # Create virtual envirorment
-    "$VERSIONPATH/$2/bin/python3" -m venv "$ENVPATH/$1"
+    "$VERSIONPATH/$python_version/bin/python3" -m venv "$ENVPATH/$env_name"
 }
 
 pvem_install() {
@@ -73,15 +76,17 @@ pvem_install() {
         return 1
     fi
 
+    target_version=$1
+
     # Check if python version looks like a version (X, X.X, X.X.X)
-    if ! [[ "$1" =~ ^[0-9]+(\.[0-9]+){0,2}$ ]]; then
-        echo "Error: Python version $1 is not a valid version"
+    if ! [[ "$target_version" =~ ^[0-9]+(\.[0-9]+){0,2}$ ]]; then
+        echo "Error: Python version $target_version is not a valid version"
         return 1
     fi
 
     # Search the python FTP server for the latest version that starts with the
     # given version
-    version=$(curl -s https://www.python.org/ftp/python/ | grep -oE "[0-9]+\.[0-9]+\.[0-9]+" | grep -E "^$1\.?" | sort -V | tail -n 1)
+    version=$(curl -s https://www.python.org/ftp/python/ | grep -oE "[0-9]+\.[0-9]+\.[0-9]+" | grep -E "^$target_version\.?" | sort -V | tail -n 1)
 
     # If no version was found, return
     if [ -z "$version" ]; then
@@ -89,11 +94,11 @@ pvem_install() {
         return 1
     fi
 
-    1=$version
+    target_version=$version
 
     # Check if python version is already installed
-    if [ -d "$VERSIONPATH/$1" ]; then
-        echo "Error: Python version $1 is already installed"
+    if [ -d "$VERSIONPATH/$target_version" ]; then
+        echo "Error: Python version $target_version is already installed"
         return 1
     fi
 
@@ -101,15 +106,15 @@ pvem_install() {
     mkdir -p "$VERSIONPATH/tmp"
 
     # Download python version
-    wget -q -O "$VERSIONPATH/tmp/Python-$1.tgz" "https://www.python.org/ftp/python/$1/Python-$1.tgz"
-    tar -zxvf "$VERSIONPATH/tmp/Python-$1.tgz" -C "$VERSIONPATH/tmp"
+    wget -q -O "$VERSIONPATH/tmp/Python-$target_version.tgz" "https://www.python.org/ftp/python/$target_version/Python-$target_version.tgz"
+    tar -zxvf "$VERSIONPATH/tmp/Python-$target_version.tgz" -C "$VERSIONPATH/tmp"
 
     # Store current directory
     cwd=$(pwd)
 
     # Install python version
-    cd "$VERSIONPATH/tmp/Python-$1"
-    ./configure --prefix="$VERSIONPATH/$1" --enable-optimizations
+    cd "$VERSIONPATH/tmp/Python-$target_version"
+    ./configure --prefix="$VERSIONPATH/$target_version" --enable-optimizations
     make
     make install
 
