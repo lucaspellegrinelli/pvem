@@ -81,7 +81,7 @@ pvem_install() {
 
     # Search the python FTP server for the latest version that starts with the
     # given version
-    version=$(curl -s https://www.python.org/ftp/python/ | grep -oE "[0-9]+\.[0-9]+\.[0-9]+" | grep -E "^$1\." | sort -V | tail -n 1)
+    version=$(curl -s https://www.python.org/ftp/python/ | grep -oE "[0-9]+\.[0-9]+\.[0-9]+" | grep -E "^$1\.?" | sort -V | tail -n 1)
 
     # If no version was found, return
     if [ -z "$version" ]; then
