@@ -1,0 +1,40 @@
+_pvem_completions() {
+    GLOBAL_OPTS=("new" "install" "use" "delete" "uninstall" "list" "versions" "help")
+    ENV_OPTS=(${(f)"$(ls "$ENVPATH" 2>/dev/null)"})
+    VERSION_OPTS=(${(f)"$(ls "$VERSIONPATH" 2>/dev/null)"})
+
+    # If there's only one word, complete with the functions
+    if [ "${#words[@]}" -eq 2 ]; then
+        reply=($GLOBAL_OPTS)
+        return
+    fi
+
+    # If there's 2 or more words, get the second word to know which function to complete
+    function_name="${words[2]}"
+
+    # If function is "new" and there's more than 2 words, complete with the python versions
+    if [ "${function_name}" = "new" ] && [ "${#words[@]}" -gt 3 ]; then
+        reply=($VERSION_OPTS)
+        return
+    fi
+
+    # If the function is "use" and there's 2 words, complete with the virtual environments
+    if [[ "${function_name}" = "use" ]] && [ "${#words[@]}" -eq 3 ]; then
+        reply=($ENV_OPTS)
+        return
+    fi
+
+    # If the function is "delete" and there's 2 words, complete with the virtual environments
+    if [[ "${function_name}" = "delete" ]] && [ "${#words[@]}" -eq 3 ]; then
+        reply=($ENV_OPTS)
+        return
+    fi
+
+    # If the function is "uninstall" and there's 2 words, complete with the python versions
+    if [ "${function_name}" = "uninstall" ] && [ "${#words[@]}" -eq 3 ]; then
+        reply=($VERSION_OPTS)
+        return
+    fi
+}
+
+compctl -K _pvem_completions pvem

@@ -20,6 +20,9 @@ fi
 mkdir -p "${INSTALL_PATH}"
 cp pvem.sh "${INSTALL_PATH}/pvem.sh"
 
+mkdir -p "${INSTALL_PATH}/completions"
+cp -r completions/* "${INSTALL_PATH}/completions"
+
 if [ -f "${HOME}/.bashrc" ]; then
     if ! grep -q "source ${INSTALL_PATH}/pvem.sh" "${HOME}/.bashrc"; then
         echo "" >> "${HOME}/.bashrc"

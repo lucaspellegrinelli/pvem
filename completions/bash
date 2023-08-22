@@ -1,0 +1,45 @@
+_pvem_completions() {
+    GLOBAL_OPTS="new install use delete uninstall list versions help"
+    ENV_OPTS=$(ls "$ENVPATH" 2>/dev/null)
+    VERSION_OPTS=$(ls "$VERSIONPATH" 2>/dev/null)
+
+    # If there's only one word, complete with the functions
+    if [ "${COMP_CWORD}" -eq 1 ]; then
+        COMPREPLY=($(compgen -W "${GLOBAL_OPTS}" -- "${COMP_WORDS[1]}"))
+        return 0
+    fi
+
+    # If there's 2 or more words, get the second word to know which function to
+    # complete
+    function_name="${COMP_WORDS[1]}"
+
+    # If function is "new" and there's more than 2 words, complete with the
+    # python versions
+    if [ "${function_name}" = "new" ] && [ "${COMP_CWORD}" -gt 2 ]; then
+        COMPREPLY=($(compgen -W "${VERSION_OPTS}" -- "${COMP_WORDS[3]}"))
+        return 0
+    fi
+
+    # If the function is "use" and there's 2 words, complete with the virtual
+    # envirorments
+    if [ "${function_name}" = "use" ] && [ "${COMP_CWORD}" -eq 2 ]; then
+        COMPREPLY=($(compgen -W "${ENV_OPTS}" -- "${COMP_WORDS[2]}"))
+        return 0
+    fi
+
+    # If the function is "delete" and there's 2 words, complete with the virtual
+    # envirorments
+    if [ "${function_name}" = "delete" ] && [ "${COMP_CWORD}" -eq 2 ]; then
+        COMPREPLY=($(compgen -W "${ENV_OPTS}" -- "${COMP_WORDS[2]}"))
+        return 0
+    fi
+
+    # If the function is "uninstall" and there's 2 words, complete with the
+    # python versions
+    if [ "${function_name}" = "uninstall" ] && [ "${COMP_CWORD}" -eq 2 ]; then
+        COMPREPLY=($(compgen -W "${VERSION_OPTS}" -- "${COMP_WORDS[2]}"))
+        return 0
+    fi
+}
+
+complete -F _pvem_completions pvem
