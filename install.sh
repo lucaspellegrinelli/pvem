@@ -7,7 +7,11 @@ fi
 
 INSTALL_PATH="${HOME}/.pvem"
 
-read -p "Enter installation path [${INSTALL_PATH}]: " user_path
+if [ "$1" == "--no-prompt" ]; then
+    user_path=""
+else
+    read -p "Enter installation path [${INSTALL_PATH}]: " user_path
+fi
 
 if [ -n "${user_path}" ]; then
     INSTALL_PATH="${user_path}"
