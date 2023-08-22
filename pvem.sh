@@ -192,7 +192,7 @@ pvem_uninstall() {
 
     # Search the versions directory for the latest version that starts with
     # the given version
-    version=$(ls "$VERSIONPATH" | grep -E "^$python_version\." | sort -V | tail -n 1)
+    version=$(ls "$VERSIONPATH" | grep -E "^$python_version\.?" | sort -V | tail -n 1)
 
     # If no version was found, return
     if [ -z "$version" ]; then
@@ -207,15 +207,6 @@ pvem_uninstall() {
         echo "Error: Python version $python_version is not installed"
         return 1
     fi
-
-    # Find all virtual envirorments that use the python version
-    envs=$(ls "$ENVPATH" | xargs -I {} grep -l "$python_version" "$ENVPATH/{}/pyvenv.cfg")
-
-    # Loop through all virtual envirorments that use the python version
-    # and delete them
-    for env in $envs; do
-        rm -rf $(dirname "$env")
-    done
 
     # Delete python version
     rm -rf "$VERSIONPATH/$python_version"
