@@ -5,6 +5,7 @@ RUN apt-get install -y curl wget make gcc zlib1g-dev
 
 COPY . .
 
-RUN ["/bin/bash", "-i", "-c", "./install.sh --no-prompt"]
+RUN chmod +x ./test.sh
+RUN ./install.sh --no-prompt
 
-CMD ["/bin/bash", "-i", "-c", "chmod +x ./test.sh && ./test.sh"]
+CMD ["/bin/bash", "-i", "-c", "./test.sh"]

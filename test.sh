@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Load pvem
+source ~/.pvem/pvem.sh
+
+# ------------------------------------------------------------------------
 echo "Verifying if pvem is installed in the system"
 
 # Assert ~/.pvem exists
@@ -16,7 +20,7 @@ if [ ! -f ~/.pvem/pvem.sh ]; then
 fi
 echo " > ~/.pvem/pvem.sh exists"
 
-echo "   > pvem is installed in the system"
+echo "Success!"
 echo ""
 
 # ------------------------------------------------------------------------
@@ -30,13 +34,13 @@ if ! command -v pvem &> /dev/null; then
 fi
 echo " > pvem command is available"
 
-echo "   > pvem is available in the system"
+echo "Success!"
 echo ""
 
 # ------------------------------------------------------------------------
 
-echo "Trying to install a python version using pvem"
-pvem install python 3.11.4
+echo "Trying to install a python version using pvem. This will take a while"
+pvem install 3.11.4 > /dev/null
 
 # Assert ~/.pvem/versions/3.11.4 exists
 if [ ! -d ~/.pvem/versions/3.11.4 ]; then
@@ -52,7 +56,7 @@ if [ ! -f ~/.pvem/versions/3.11.4/bin/python3 ]; then
 fi
 echo " > ~/.pvem/versions/3.11.4/bin/python3 exists"
 
-echo "   > Successfully installed python 3.11.4 using pvem"
+echo "Success!"
 echo ""
 
 # ------------------------------------------------------------------------
@@ -74,5 +78,4 @@ if [ ! -f ~/.pvem/envs/test/bin/activate ]; then
 fi
 echo " > ~/.pvem/envs/test/bin/activate exists"
 
-echo "   > Successfully created a virtual environment using pvem"
-
+echo "Success!"

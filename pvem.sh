@@ -45,7 +45,7 @@ pvem_new() {
 
     # Search the versions directory for the latest version that starts with
     # the given version
-    version=$(ls "$VERSIONPATH" | grep -E "^$python_version\." | sort -V | tail -n 1)
+    version=$(ls "$VERSIONPATH" | grep -E "^$python_version\.?" | sort -V | tail -n 1)
 
     # If no version was found, return
     if [ -z "$version" ]; then
