@@ -7,11 +7,11 @@ This is a tool to manage locally installed python versions and barebones (`pytho
 
 ## Installation
 
+### Linux / macOS
+
 There are some requirements (mainly zlib) which can be installed (in debian based linux distros) with
 
 ```apt-get install -y curl wget make gcc zlib1g-dev```
-
-### Linux / macOS
 
 Download the installation file
 
@@ -39,6 +39,14 @@ Not supported
 * `pvem delete [env-name]` - Deletes the specified virtual environment
 * `pvem uninstall [python-version]` - Uninstalls a specific python version
 * `deactivate` - Default linux command to leave a virtual environment
+
+## Running tests
+
+With docker running, you can run
+
+```make test```
+
+This will basically run the [test.sh](https://github.com/lucaspellegrinelli/pvem/blob/main/test.sh) script inside a docker container which tests the funcionality of the commands and prints out the results
 
 ## How it works
 
