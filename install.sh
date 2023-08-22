@@ -19,20 +19,21 @@ fi
 
 mkdir -p "${INSTALL_PATH}"
 cp pvem.sh "${INSTALL_PATH}/pvem.sh"
+
+if [ -f "${HOME}/.bashrc" ]; then
+    if ! grep -q "source ${INSTALL_PATH}/pvem.sh" "${HOME}/.bashrc"; then
+        echo "" >> "${HOME}/.bashrc"
+        echo "export PVEM_PATH=${INSTALL_PATH}" >> "${HOME}/.bashrc"
+        echo "source ${INSTALL_PATH}/pvem.sh" >> "${HOME}/.bashrc"
+    fi
+fi
+
+if [ -f "${HOME}/.zshrc" ]; then
+    if ! grep -q "source ${INSTALL_PATH}/pvem.sh" "${HOME}/.zshrc"; then
+        echo "" >> "${HOME}/.zshrc"
+        echo "export PVEM_PATH=${INSTALL_PATH}" >> "${HOME}/.zshrc"
+        echo "source ${INSTALL_PATH}/pvem.sh" >> "${HOME}/.zshrc"
+    fi
+fi
+
 echo "pvem.sh has been installed to ${INSTALL_PATH}"
-
-if ! grep -q "export PVEM_PATH=${INSTALL_PATH}" "${HOME}/.bashrc"; then
-    echo "export PVEM_PATH=${INSTALL_PATH}" >> "${HOME}/.bashrc"
-fi
-
-if ! grep -q "source ${INSTALL_PATH}/pvem.sh" "${HOME}/.bashrc"; then
-    echo "source ${INSTALL_PATH}/pvem.sh" >> "${HOME}/.bashrc"
-fi
-
-if ! grep -q "export PVEM_PATH=${INSTALL_PATH}" "${HOME}/.zshrc"; then
-    echo "export PVEM_PATH=${INSTALL_PATH}" >> "${HOME}/.zshrc"
-fi
-
-if ! grep -q "source ${INSTALL_PATH}/pvem.sh" "${HOME}/.zshrc"; then
-    echo "source ${INSTALL_PATH}/pvem.sh" >> "${HOME}/.zshrc"
-fi
