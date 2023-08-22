@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Install pvem
+./install.sh --no-prompt > /dev/null 2> install_error.log
+
 # Load pvem
 source ~/.pvem/pvem.sh
 
@@ -9,6 +12,7 @@ echo "Verifying if pvem is installed in the system"
 
 # Assert ~/.pvem exists
 if [ ! -d ~/.pvem ]; then
+    cat install_error.log
     echo " > Error: ~/.pvem does not exist"
     exit 1
 fi
@@ -16,6 +20,7 @@ echo " > ~/.pvem exists"
 
 # Assert ~/.pvem/pvem.sh exists
 if [ ! -f ~/.pvem/pvem.sh ]; then
+    cat install_error.log
     echo " > Error: ~/.pvem/pvem.sh does not exist"
     exit 1
 fi
