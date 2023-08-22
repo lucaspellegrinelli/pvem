@@ -136,14 +136,16 @@ pvem_use() {
         return 1
     fi
 
+    env_name=$1
+
     # Check if virtual envirorment exists
-    if ! [ -d "$ENVPATH/$1" ]; then
-        echo "Error: Virtual envirorment $1 does not exist"
+    if ! [ -d "$ENVPATH/$env_name" ]; then
+        echo "Error: Virtual envirorment $env_name does not exist"
         return 1
     fi
 
     # Activate virtual envirorment
-    source "$ENVPATH/$1/bin/activate"
+    source "$ENVPATH/$env_name/bin/activate"
 }
 
 pvem_delete() {
@@ -157,14 +159,16 @@ pvem_delete() {
         return 1
     fi
 
+    env_name=$1
+
     # Check if virtual envirorment exists
-    if ! [ -d "$ENVPATH/$1" ]; then
-        echo "Error: Virtual envirorment $1 does not exist"
+    if ! [ -d "$ENVPATH/$env_name" ]; then
+        echo "Error: Virtual envirorment $env_name does not exist"
         return 1
     fi
 
     # Delete virtual envirorment
-    rm -rf "$ENVPATH/$1"
+    rm -rf "$ENVPATH/$env_name"
 }
 
 pvem_uninstall() {
@@ -178,32 +182,34 @@ pvem_uninstall() {
         return 1
     fi
 
+    python_version=$1
+
     # Check if python version looks like a version (X, X.X, X.X.X)
-    if ! [[ "$1" =~ ^[0-9]+(\.[0-9]+){0,2}$ ]]; then
-        echo "Error: Python version $1 is not a valid version"
+    if ! [[ "$python_version" =~ ^[0-9]+(\.[0-9]+){0,2}$ ]]; then
+        echo "Error: Python version $python_version is not a valid version"
         return 1
     fi
 
     # Search the versions directory for the latest version that starts with
     # the given version
-    version=$(ls "$VERSIONPATH" | grep -E "^$1\." | sort -V | tail -n 1)
+    version=$(ls "$VERSIONPATH" | grep -E "^$python_version\." | sort -V | tail -n 1)
 
     # If no version was found, return
     if [ -z "$version" ]; then
-        echo "Error: Python version $1 is not installed"
+        echo "Error: Python version $python_version is not installed"
         return 1
     fi
 
-    1=$version
+    python_version=$version
 
     # Check if python version is installed
-    if ! [ -d "$VERSIONPATH/$1" ]; then
-        echo "Error: Python version $1 is not installed"
+    if ! [ -d "$VERSIONPATH/$python_version" ]; then
+        echo "Error: Python version $python_version is not installed"
         return 1
     fi
 
     # Find all virtual envirorments that use the python version
-    envs=$(ls "$ENVPATH" | xargs -I {} grep -l "$1" "$ENVPATH/{}/pyvenv.cfg")
+    envs=$(ls "$ENVPATH" | xargs -I {} grep -l "$python_version" "$ENVPATH/{}/pyvenv.cfg")
 
     # Loop through all virtual envirorments that use the python version
     # and delete them
@@ -212,7 +218,7 @@ pvem_uninstall() {
     done
 
     # Delete python version
-    rm -rf "$VERSIONPATH/$1"
+    rm -rf "$VERSIONPATH/$python_version"
 }
 
 pvem_list() {
