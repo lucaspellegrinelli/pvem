@@ -102,6 +102,7 @@ if [ -d ~/.pvem/envs/test ]; then
     echo " > Error: ~/.pvem/envs/test exists"
     exit 1
 fi
+echo " > ~/.pvem/envs/test was deleted"
 
 echo "Success!"
 echo ""
@@ -117,5 +118,6 @@ if [ -d ~/.pvem/versions/3.11.4 ]; then
     echo " > Error: ~/.pvem/versions/3.11.4 exists"
     exit 1
 fi
+echo " > ~/.pvem/versions/3.11.4 was deleted"
 
 echo "Success!"
