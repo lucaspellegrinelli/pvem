@@ -2,6 +2,9 @@
 
 This is a tool to manage locally installed python versions and barebones (`python -m venv [env]`) virtual environments using the managed versions.
 
+![ezgif-1-ed948a2f98](https://github.com/lucaspellegrinelli/pvem/assets/19651296/b92c2b70-44f8-44b7-826c-130da2e5664f)
+
+
 ## Installation
 
 There are some requirements (mainly zlib) which can be installed (in debian based linux distros) with
