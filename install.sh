@@ -2,7 +2,10 @@
 
 if [ ! -f pvem.sh ]; then
     echo "pvem.sh not found. Downloading from GitHub..."
-    wget -q https://raw.githubusercontent.com/lucaspellegrinelli/pvem/main/pvem.sh
+    wget -q https://github.com/lucaspellegrinelli/pvem/archive/refs/heads/main.tar.gz
+    tar -xf pvem-main.tar.gz
+    mv pvem-main/pvem.sh pvem.sh
+    mv pvem-main/completions completions/
 fi
 
 INSTALL_PATH="${HOME}/.pvem"
