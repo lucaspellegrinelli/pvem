@@ -5,6 +5,7 @@ if [ ! -f pvem.sh ]; then
     wget -O pvem-main.tar.gz -q https://github.com/lucaspellegrinelli/pvem/archive/refs/heads/main.tar.gz
     tar -xf pvem-main.tar.gz
     mv pvem-main/pvem.sh pvem.sh
+    mv pvem-main/scripts scripts/
     mv pvem-main/completions completions/
 fi
 
@@ -22,6 +23,9 @@ fi
 
 mkdir -p "${INSTALL_PATH}"
 cp pvem.sh "${INSTALL_PATH}/pvem.sh"
+
+mkdir -p "${INSTALL_PATH}/scripts"
+cp -r scripts/* "${INSTALL_PATH}/scripts"
 
 mkdir -p "${INSTALL_PATH}/completions"
 cp -r completions/* "${INSTALL_PATH}/completions"
