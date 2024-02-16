@@ -2,5 +2,7 @@ install:
 	@./install.sh
 
 test:
-	@docker build -f Dockerfile.test -t pvem .
+	@docker build -f test/Dockerfile.test -t pvem .
 	@docker run -it --rm pvem
+
+.PHONY: test

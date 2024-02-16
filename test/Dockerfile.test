@@ -4,6 +4,7 @@ RUN apt-get update
 RUN apt-get install -y curl wget make gcc zlib1g-dev
 
 COPY . .
+COPY test/* .
 
 RUN chmod +x ./test.sh
 
