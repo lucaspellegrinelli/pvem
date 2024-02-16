@@ -2,6 +2,7 @@
 # Summary: Uninstall a python version
 # Parameters:
 #   $1: Python version to uninstall
+#   $2: --no-prompt flag to avoid confirmation prompt
 # Return: 0 if the python version was uninstalled, 1 otherwise
 _pvem_uninstall() {
     if [ -z "$1" ]; then
@@ -37,11 +38,14 @@ _pvem_uninstall() {
 
     if __pvem_check_version_is_used "$python_version"; then
         printf "${C_YELLOW}Warning: Python version $python_version is used by one or more virtual envirorments\n"
-        printf "${C_RESET}Are you sure you want to uninstall it? (y/N)\n"
-        read -r CONFIRM
-        if [ "$CONFIRM" != "y" ]; then
-            printf "${C_RED}Uninstall aborted\n"
-            return 1
+
+        if [ "$2" != "--no-prompt" ]; then
+            printf "${C_RESET}Are you sure you want to uninstall it? (y/N)\n"
+            read -r CONFIRM
+            if [ "$CONFIRM" != "y" ]; then
+                printf "${C_RED}Uninstall aborted\n"
+                return 1
+            fi
         fi
     fi
 

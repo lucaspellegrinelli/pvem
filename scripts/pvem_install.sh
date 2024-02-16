@@ -2,6 +2,7 @@
 # Summary: Install a new python version
 # Parameters:
 #   $1: Python version to install
+#   $2: --no-prompt flag
 # Return: 0 if the python version was installed, 1 otherwise
 _pvem_install() {
     if [ -z "$1" ]; then
@@ -21,7 +22,7 @@ _pvem_install() {
 
     # Search the python FTP server for the latest version that starts with the
     # given version
-    version=$(curl -s https://www.python.org/ftp/python/ | grep -oE "[0-9]+\.[0-9]+\.[0-9]+" | grep -E "^$target_version\D" | sort -V | tail -n 1)
+    version=$(curl -s https://www.python.org/ftp/python/ | grep -oE "[0-9]+\.[0-9]+\.[0-9]+" | grep -E "^$target_version(?:\D|$)" | sort -V | tail -n 1)
 
     if [ -z "$version" ]; then
         printf "${C_RED}Error: Python version $target_version is not available\n"
@@ -37,12 +38,14 @@ _pvem_install() {
     fi
 
     printf "${C_YELLOW}You are about to install Python version $target_version\n"
-    printf "${C_RESET}Do you want to continue? (Y/n) "
-    read -r response
+    if [ "$2" != "--no-prompt" ]; then
+        printf "${C_RESET}Do you want to continue? (Y/n) "
+        read -r response
 
-    if [ "$response" = "n" ]; then
-        printf "${C_RED}Installation aborted\n"
-        return 1
+        if [ "$response" = "n" ]; then
+            printf "${C_RED}Installation aborted\n"
+            return 1
+        fi
     fi
 
     if ! __pvem_download_and_install_version "$target_version"; then
