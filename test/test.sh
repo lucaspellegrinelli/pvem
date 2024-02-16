@@ -46,7 +46,7 @@ echo ""
 # ------------------------------------------------------------------------
 
 echo "Trying to install a python version using pvem. This will take a while"
-pvem install 3.11.4 --no-prompt > /dev/null 2> install_error.log
+yes | pvem install 3.11.4 > /dev/null 2> install_error.log
 
 # Assert ~/.pvem/versions/3.11.4 exists
 if [ ! -d ~/.pvem/versions/3.11.4 ]; then
@@ -110,7 +110,7 @@ echo ""
 # ------------------------------------------------------------------------
 
 echo "Trying to uninstall the python version using pvem"
-pvem uninstall 3.11.4 --no-prompt > /dev/null 2> uninstall_error.log
+yes | pvem uninstall 3.11.4 > /dev/null 2> uninstall_error.log
 
 # Assert ~/.pvem/versions/3.11.4 does not exist
 if [ -d ~/.pvem/versions/3.11.4 ]; then

@@ -94,6 +94,6 @@ __pvem_check_version_is_used() {
 # Return: The best matching installed python version
 __pvem_find_best_matching_installed_version() {
     python_version=$1
-    version=$(ls "$VERSIONPATH" | grep -E "^$python_version\D" | sort -V | tail -n 1)
+    version=$(ls "$VERSIONPATH" | grep -E "^$python_version(?:\D|$)" | sort -V | tail -n 1)
     echo "$version"
 }

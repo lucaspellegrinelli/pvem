@@ -2,7 +2,6 @@
 # Summary: Install a new python version
 # Parameters:
 #   $1: Python version to install
-#   $2: --no-prompt flag
 # Return: 0 if the python version was installed, 1 otherwise
 _pvem_install() {
     if [ -z "$1" ]; then
@@ -14,7 +13,7 @@ _pvem_install() {
     fi
 
     target_version=$1
-
+    
     if ! __pvem_check_version_could_be_valid "$target_version"; then
         printf "${C_RED}Error: Python version $target_version is not a valid version\n"
         return 1
@@ -38,14 +37,12 @@ _pvem_install() {
     fi
 
     printf "${C_YELLOW}You are about to install Python version $target_version\n"
-    if [ "$2" != "--no-prompt" ]; then
-        printf "${C_RESET}Do you want to continue? (Y/n) "
-        read -r response
+    printf "${C_RESET}Do you want to continue? (Y/n) "
+    read -r response
 
-        if [ "$response" = "n" ]; then
-            printf "${C_RED}Installation aborted\n"
-            return 1
-        fi
+    if [ "$response" = "n" ]; then
+        printf "${C_RED}Installation aborted\n"
+        return 1
     fi
 
     if ! __pvem_download_and_install_version "$target_version"; then
