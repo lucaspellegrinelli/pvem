@@ -30,7 +30,11 @@ _pvem_new() {
 
     # Check if arguments are not empty
     if [ -z "$1" ] || [ -z "$2" ]; then
+        echo "Error: Missing arguments for 'new' function."
+        echo ""
         echo "Usage: pvem new <name> <python version>"
+        echo "  <name>              The name of the virtual environment to create."
+        echo "  <python version>    The version of Python to use in the virtual environment."
         return 1
     fi
 
@@ -72,7 +76,10 @@ _pvem_install() {
 
     # Check if argument is not empty
     if [ -z "$1" ]; then
+        echo "Error: Missing arguments for 'install' function."
+        echo ""
         echo "Usage: pvem install <python version>"
+        echo "  <python version>    The version of Python to install."
         return 1
     fi
 
@@ -99,6 +106,7 @@ _pvem_install() {
     # Check if python version is already installed
     if [ -d "$VERSIONPATH/$target_version" ]; then
         echo "Error: Python version $target_version is already installed"
+        echo "Use 'pvem versions' to see all installed versions"
         return 1
     fi
 
@@ -132,7 +140,10 @@ _pvem_use() {
 
     # Check if argument is not empty
     if [ -z "$1" ]; then
+        echo "Error: Missing arguments for 'use' function."
+        echo ""
         echo "Usage: pvem use <name>"
+        echo "  <name>              The name of the virtual environment to source into."
         return 1
     fi
 
@@ -141,6 +152,7 @@ _pvem_use() {
     # Check if virtual envirorment exists
     if ! [ -d "$ENVPATH/$env_name" ]; then
         echo "Error: Virtual envirorment $env_name does not exist"
+        echo "Use 'pvem list' to see all available virtual envirorments"
         return 1
     fi
 
@@ -155,7 +167,10 @@ _pvem_delete() {
 
     # Check if argument is not empty
     if [ -z "$1" ]; then
+        echo "Error: Missing arguments for 'delete' function."
+        echo ""
         echo "Usage: pvem delete <name>"
+        echo "  <name>              The name of the virtual environment to delete."
         return 1
     fi
 
@@ -164,6 +179,7 @@ _pvem_delete() {
     # Check if virtual envirorment exists
     if ! [ -d "$ENVPATH/$env_name" ]; then
         echo "Error: Virtual envirorment $env_name does not exist"
+        echo "Use 'pvem list' to see all available virtual envirorments"
         return 1
     fi
 
@@ -178,7 +194,10 @@ _pvem_uninstall() {
 
     # Check if argument is not empty
     if [ -z "$1" ]; then
+        echo "Error: Missing arguments for 'uninstall' function."
+        echo ""
         echo "Usage: pvem uninstall <python version>"
+        echo "  <python version>    The version of Python to uninstall."
         return 1
     fi
 
@@ -197,6 +216,7 @@ _pvem_uninstall() {
     # If no version was found, return
     if [ -z "$version" ]; then
         echo "Error: Python version $python_version is not installed"
+        echo "Use 'pvem versions' to see all installed versions"
         return 1
     fi
 
@@ -205,6 +225,7 @@ _pvem_uninstall() {
     # Check if python version is installed
     if ! [ -d "$VERSIONPATH/$python_version" ]; then
         echo "Error: Python version $python_version is not installed"
+        echo "Use 'pvem versions' to see all installed versions"
         return 1
     fi
 
@@ -241,20 +262,32 @@ _pvem_versions() {
         return 1
     fi
 
-    ls "$VERSIONPATH"
+    # Print all installed python versions one per line
+    for version in $(ls "$VERSIONPATH"); do
+        echo "$version"
+    done
 }
 
 _pvem_help() {
-    echo "Usage: pvem <function> <arguments>"
+    echo "Usage: pvem <function> [arguments]"
+    echo ""
+    echo "pvem is a tool for managing python virtual environments and python versions."
+    echo ""
     echo "Functions:"
-    printf "  %-10s %-25s %s\n" "new" "<name> <python version>" "Create a new virtual environment"
-    printf "  %-10s %-25s %s\n" "install" "<python version>" "Install a python version"
-    printf "  %-10s %-25s %s\n" "use" "<name>" "Activate a virtual environment"
-    printf "  %-10s %-25s %s\n" "delete" "<name>" "Delete a virtual environment"
-    printf "  %-10s %-25s %s\n" "uninstall" "<python version>" "Uninstall a python version"
-    printf "  %-10s %-25s %s\n" "list" "" "List all available virtual environments"
-    printf "  %-10s %-25s %s\n" "versions" "" "List all installed python versions"
-    printf "  %-10s %-25s %s\n" "help" "" "Show this help message"
+    echo "  new <name> <python version>       Create a new virtual environment with the specified name and Python version."
+    echo "  install <python version>          Install the specified Python version."
+    echo "  use <name>                        Activate the virtual environment with the specified name."
+    echo "  delete <name>                     Delete the virtual environment with the specified name."
+    echo "  uninstall <python version>        Uninstall the specified Python version."
+    echo "  list                              List all available virtual environments."
+    echo "  versions                          List all installed Python versions."
+    echo "  help                              Show this help message."
+    echo ""
+    echo "Examples:"
+    echo "  pvem install 3.9                  Install Python 3.9."
+    echo "  pvem new myenv 3.9                Create a new virtual environment named 'myenv' with Python 3.9."
+    echo "  pvem use myenv                    Activate the 'myenv' virtual environment."
+    echo "  pvem delete myenv                 Delete the 'myenv' virtual environment."
 }
 
 pvem() {
@@ -264,7 +297,7 @@ pvem() {
 
     # Check if argument is not empty
     if [ -z "$1" ]; then
-        echo "Usage: pvem <function> <arguments>"
+        _pvem_help
         return 1
     fi
 
