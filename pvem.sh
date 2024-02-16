@@ -221,7 +221,15 @@ _pvem_list() {
         return 1
     fi
 
-    ls "$ENVPATH"
+    # Print the virtual envirorment name and version
+    for env in $(ls "$ENVPATH"); do
+        if ! [ -f "$ENVPATH/$env/pyvenv.cfg" ]; then
+            continue
+        fi
+
+        version=$(cat "$ENVPATH/$env/pyvenv.cfg" | grep -oE "version = [0-9]+\.[0-9]+\.[0-9]+" | cut -d " " -f 3)
+        printf "%-20s %s\n" "$env" "$version"
+    done
 }
 
 _pvem_versions() {
