@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Install pvem
 ./install.sh --no-prompt > /dev/null 2> install_error.log

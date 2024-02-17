@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # If PVEM_PATH is not set, set it to ~/.pvem
 if [ -z "$PVEM_PATH" ]; then
     PVEM_PATH="$HOME/.pvem"
@@ -22,7 +24,7 @@ if ! [ -d "$VERSIONPATH" ]; then
     mkdir -p "$VERSIONPATH"
 fi
 
-source $PVEM_PATH/scripts/utils.sh
+source "$PVEM_PATH"/scripts/utils.sh
 
 # Function: _pvem_help
 # Summary: Show help message for pvem
@@ -62,31 +64,31 @@ pvem() {
 
     case "$1" in
         "new")
-            source $PVEM_PATH/scripts/pvem_new.sh
+            source "$PVEM_PATH"/scripts/pvem_new.sh
             _pvem_new "$2" "$3"
             ;;
         "install")
-            source $PVEM_PATH/scripts/pvem_install.sh
+            source "$PVEM_PATH"/scripts/pvem_install.sh
             _pvem_install "$2"
             ;;
         "use")
-            source $PVEM_PATH/scripts/pvem_use.sh
+            source "$PVEM_PATH"/scripts/pvem_use.sh
             _pvem_use "$2"
             ;;
         "delete")
-            source $PVEM_PATH/scripts/pvem_delete.sh
+            source "$PVEM_PATH"/scripts/pvem_delete.sh
             _pvem_delete "$2"
             ;;
         "uninstall")
-            source $PVEM_PATH/scripts/pvem_uninstall.sh
+            source "$PVEM_PATH"/scripts/pvem_uninstall.sh
             _pvem_uninstall "$2"
             ;;
         "list")
-            source $PVEM_PATH/scripts/pvem_list.sh
+            source "$PVEM_PATH"/scripts/pvem_list.sh
             _pvem_list
             ;;
         "versions")
-            source $PVEM_PATH/scripts/pvem_versions.sh
+            source "$PVEM_PATH"/scripts/pvem_versions.sh
             _pvem_versions
             ;;
         "help")

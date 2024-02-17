@@ -1,9 +1,11 @@
+#!/usr/bin/env bash
+
 # Text color codes
-C_RESET="\033[0m"
-C_RED="\033[1;31m"
-C_GREEN="\033[1;32m"
-C_YELLOW="\033[1;33m"
-C_BLUE="\033[1;36m"
+export C_RESET="\033[0m"
+export C_RED="\033[1;31m"
+export C_GREEN="\033[1;32m"
+export C_YELLOW="\033[1;33m"
+export C_BLUE="\033[1;36m"
 
 # Function: __pvem_output_to_single_line
 # Summary: Print the live output of a command to a single line
@@ -78,7 +80,7 @@ __pvem_get_env_python_version() {
         return 1
     fi
 
-    version=$(cat "$ENVPATH/$env_name/pyvenv.cfg" | grep -oE "version = [0-9]+\.[0-9]+\.[0-9]+" | cut -d " " -f 3)
+    version=$(grep -oE "version = [0-9]+\.[0-9]+\.[0-9]+" "$ENVPATH/$env_name/pyvenv.cfg" | cut -d " " -f 3)
     echo "$version"
 }
 
@@ -90,7 +92,11 @@ __pvem_get_env_python_version() {
 __pvem_check_version_is_used() {
     python_version=$1
 
-    for env in $(ls "$ENVPATH"); do
+    for env in "$ENVPATH"/*; do
+        if ! [ -d "$env" ]; then
+            continue
+        fi
+
         if [ -f "$ENVPATH/$env/pyvenv.cfg" ]; then
             version=$(__pvem_get_env_python_version "$env")
             if [ "$version" = "$python_version" ]; then
@@ -110,6 +116,21 @@ __pvem_check_version_is_used() {
 # Return: The best matching installed python version
 __pvem_find_best_matching_installed_version() {
     python_version=$1
-    version=$(ls "$VERSIONPATH" | grep -E "^$python_version(?:\D|$)" | sort -V | tail -n 1)
+
+    version_list=""
+    for version in "$VERSIONPATH"/*; do
+        if ! [ -d "$version" ]; then
+            continue
+        fi
+
+        if [[ "$version" == *tmp ]]; then
+            continue
+        fi
+
+        version=$(basename "$version")
+        version_list="$version_list\n$version"
+    done
+
+    version=$(echo "$version_list" | grep -E "^$python_version(?:\D|$)" | sort -V | tail -n 1)
     echo "$version"
 }
