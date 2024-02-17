@@ -24,7 +24,7 @@ if ! [ -d "$VERSIONPATH" ]; then
     mkdir -p "$VERSIONPATH"
 fi
 
-source "$PVEM_PATH"/scripts/utils.sh
+. "$PVEM_PATH"/scripts/utils.sh
 
 # Function: _pvem_help
 # Summary: Show help message for pvem
@@ -64,31 +64,31 @@ pvem() {
 
     case "$1" in
         "new")
-            source "$PVEM_PATH"/scripts/pvem_new.sh
+            . "$PVEM_PATH"/scripts/pvem_new.sh
             _pvem_new "$2" "$3"
             ;;
         "install")
-            source "$PVEM_PATH"/scripts/pvem_install.sh
+            . "$PVEM_PATH"/scripts/pvem_install.sh
             _pvem_install "$2"
             ;;
         "use")
-            source "$PVEM_PATH"/scripts/pvem_use.sh
+            . "$PVEM_PATH"/scripts/pvem_use.sh
             _pvem_use "$2"
             ;;
         "delete")
-            source "$PVEM_PATH"/scripts/pvem_delete.sh
+            . "$PVEM_PATH"/scripts/pvem_delete.sh
             _pvem_delete "$2"
             ;;
         "uninstall")
-            source "$PVEM_PATH"/scripts/pvem_uninstall.sh
+            . "$PVEM_PATH"/scripts/pvem_uninstall.sh
             _pvem_uninstall "$2"
             ;;
         "list")
-            source "$PVEM_PATH"/scripts/pvem_list.sh
+            . "$PVEM_PATH"/scripts/pvem_list.sh
             _pvem_list
             ;;
         "versions")
-            source "$PVEM_PATH"/scripts/pvem_versions.sh
+            . "$PVEM_PATH"/scripts/pvem_versions.sh
             _pvem_versions
             ;;
         "help")
@@ -99,11 +99,13 @@ pvem() {
             return 1
             ;;
     esac
+
+    printf "%b" "$C_RESET"
 }
 
 # Source completions
 if [ -n "$ZSH_VERSION" ]; then
-    source "$PVEM_PATH/completions/zsh"
+    . "$PVEM_PATH/completions/zsh"
 elif [ -n "$BASH_VERSION" ]; then
-    source "$PVEM_PATH/completions/bash"
+    . "$PVEM_PATH/completions/bash"
 fi

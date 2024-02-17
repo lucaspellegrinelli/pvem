@@ -123,14 +123,10 @@ __pvem_find_best_matching_installed_version() {
             continue
         fi
 
-        if [[ "$version" == *tmp ]]; then
-            continue
-        fi
-
         version=$(basename "$version")
-        version_list="$version_list\n$version"
+        version_list="$version_list $version"
     done
 
-    version=$(echo "$version_list" | grep -E "^$python_version(?:\D|$)" | sort -V | tail -n 1)
+    version=$(echo "$version_list" | tr " " "\n" | grep -E "^${python_version}(?:[^0-9]|$)" | sort -V | tail -n 1)
     echo "$version"
 }
