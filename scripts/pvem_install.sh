@@ -108,7 +108,12 @@ __pvem_download_python_source() {
 
     if [ $? -ne 0 ]; then
         printf "\n"
-        tail -n 10 $WGET_LOG_FILE
+
+        if [ -f $WGET_LOG_FILE ]; then
+            tail -n 10 $WGET_LOG_FILE
+            rm $WGET_LOG_FILE
+        fi
+
         return 1
     fi
 
@@ -137,7 +142,12 @@ __pvem_unpack_python_source() {
 
     if [ $? -ne 0 ]; then
         printf "\n"
-        tail -n 10 $TAR_LOG_FILE
+
+        if [ -f $TAR_LOG_FILE ]; then
+            tail -n 10 $TAR_LOG_FILE
+            rm $TAR_LOG_FILE
+        fi
+
         return 1
     fi
 
@@ -180,7 +190,11 @@ __pvem_install_python_source() {
     fi
 
     if [ $exit_status -ne 0 ]; then
-        tail -n 10 $INSTALL_LOG_FILE
+        if [ -f $INSTALL_LOG_FILE ]; then
+            tail -n 10 $INSTALL_LOG_FILE
+            rm $INSTALL_LOG_FILE
+        fi
+
         rm -rf $target_path
     fi
 
