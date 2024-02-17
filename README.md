@@ -2,7 +2,7 @@
 
 This is a tool to manage locally installed python versions and barebones (`python -m venv [env]`) virtual environments using the managed versions.
 
-![usage example](https://github.com/lucaspellegrinelli/pvem/assets/19651296/b92c2b70-44f8-44b7-826c-130da2e5664f)
+![usage example](https://github.com/lucaspellegrinelli/pvem/assets/19651296/122136b5-f409-4766-97f9-717b5f46aded)
 
 
 ## Getting Started
