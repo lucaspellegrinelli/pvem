@@ -47,15 +47,6 @@ _pvem_install() {
 
     if ! __pvem_download_and_install_version "$target_version"; then
         printf "${C_RED}Error: Python version $target_version could not be installed\n"
-        
-        if [ -d "$VERSIONPATH/tmp" ]; then
-            rm -rf "$VERSIONPATH/tmp"
-        fi
-
-        if [ -d "$VERSIONPATH/$target_version" ]; then
-            rm -rf "$VERSIONPATH/$target_version"
-        fi
-
         return 1
     fi
 
@@ -75,21 +66,30 @@ __pvem_download_and_install_version() {
         rm -rf "$VERSIONPATH/tmp"
     fi
 
-    mkdir -p "$VERSIONPATH/tmp" &&
+    mkdir -p "$VERSIONPATH/tmp"
     
     # Download python version
-    wget -q -O "$VERSIONPATH/tmp/Python-$target_version.tgz" "https://www.python.org/ftp/python/$target_version/Python-$target_version.tgz" &&
-    tar -zxvf "$VERSIONPATH/tmp/Python-$target_version.tgz" -C "$VERSIONPATH/tmp" &&
+    wget -q -O "$VERSIONPATH/tmp/Python-$target_version.tgz" "https://www.python.org/ftp/python/$target_version/Python-$target_version.tgz"
+    tar -zxvf "$VERSIONPATH/tmp/Python-$target_version.tgz" -C "$VERSIONPATH/tmp"
 
-    cwd=$(pwd) &&
-
-    cd "$VERSIONPATH/tmp/Python-$target_version" &&
-    ./configure --prefix="$VERSIONPATH/$target_version" &&
-    make &&
-    make install &&
+    # Install python version in a subshell
+    (
+        set -e
+        cd "$VERSIONPATH/tmp/Python-$target_version" &&
+        ./configure --prefix="$VERSIONPATH/$target_version" &&
+        make -j4 &&
+        make install
+    )
     
-    cd "$cwd" &&
-    rm -rf "$VERSIONPATH/tmp"
+    exit_status=$?
 
-    return $?
+    if [ -d "$VERSIONPATH/tmp" ]; then
+        rm -rf "$VERSIONPATH/tmp"
+    fi
+
+    if [ $exit_status -ne 0 ]; then
+        rm -rf "$VERSIONPATH/$target_version"
+    fi
+
+    return $exit_status
 }
