@@ -7,17 +7,17 @@
 # Return: 0 if the python version was installed, 1 otherwise
 _pvem_install() {
     if [ -z "$1" ]; then
-        printf "%bError: Missing arguments for 'install' function.\n" "${C_RED}"
-        printf "%b\n" "${C_RESET}"
-        printf "Usage: pvem install %b<python version>\n" "${C_BLUE}"
-        printf "  %b<python version>%b    The version of Python to install.\n" "${C_BLUE}" "${C_RESET}"
+        printf "%bError: Missing arguments for 'install' function.\n" "$C_RED"
+        printf "%b\n" "$C_RESET"
+        printf "Usage: pvem install %b<python version>\n" "$C_BLUE"
+        printf "  %b<python version>%b    The version of Python to install.\n" "$C_BLUE" "$C_RESET"
         return 1
     fi
 
     target_version=$1
     
     if ! __pvem_check_version_could_be_valid "$target_version"; then
-        printf "%bError: Python version %s is not a valid version\n" "${C_RED}" "$target_version"
+        printf "%bError: Python version %s is not a valid version\n" "$C_RED" "$target_version"
         return 1
     fi
 
@@ -26,34 +26,34 @@ _pvem_install() {
     version=$(curl -s https://www.python.org/ftp/python/ | grep -oE "[0-9]+\.[0-9]+\.[0-9]+" | grep -E "^$target_version(?:\D|$)" | sort -V | tail -n 1)
 
     if [ -z "$version" ]; then
-        printf "%bError: Python version %s is not available\n" "${C_RED}" "$target_version"
+        printf "%bError: Python version %s is not available\n" "$C_RED" "$target_version"
         return 1
     fi
 
     target_version=$version
 
     if __pvem_check_version_installed "$target_version"; then
-        printf "%bError: Python version %s is already installed\n" "${C_RED}" "$target_version"
-        printf "%bUse %b%s%b to see all installed versions\n" "${C_RESET}" "${C_BLUE}" "pvem versions" "${C_RESET}"
+        printf "%bError: Python version %s is already installed\n" "$C_RED" "$target_version"
+        printf "%bUse %b%s%b to see all installed versions\n" "$C_RESET" "$C_BLUE" "pvem versions" "$C_RESET"
         return 1
     fi
 
-    printf "%bYou are about to install Python version %s\n" "${C_YELLOW}" "$target_version"
-    printf "%bDo you want to continue? (Y/n) " "${C_RESET}"
+    printf "%bYou are about to install Python version %s\n" "$C_YELLOW" "$target_version"
+    printf "%bDo you want to continue? (Y/n) " "$C_RESET"
     read -r response
 
     if [ "$response" = "n" ]; then
-        printf "%bInstallation aborted\n" "${C_RED}"
+        printf "%bInstallation aborted\n" "$C_RED"
         return 1
     fi
 
     printf "\n"
     if ! __pvem_download_and_install_version "$target_version"; then
-        printf "%bError: Python version %s could not be installed\n" "${C_RED}" "$target_version"
+        printf "%bError: Python version %s could not be installed\n" "$C_RED" "$target_version"
         return 1
     fi
 
-    printf "%bPython version %s installed\n" "${C_GREEN}" "$target_version"
+    printf "%bPython version %s installed\n" "$C_GREEN" "$target_version"
     return 0
 }
 
@@ -105,7 +105,7 @@ __pvem_download_python_source() {
     WGET_LOG_FILE=$(mktemp)
 
     mkdir -p "$(dirname "$target_path")"
-    printf "%bDownloading source code%b " "${C_BLUE}" "${C_RESET}"
+    printf "%bDownloading source code%b " "$C_BLUE" "$C_RESET"
     if ! wget -O "$target_path" "https://www.python.org/ftp/python/$version/Python-$version.tgz" 2>"$WGET_LOG_FILE"; then
         printf "\n"
 
@@ -137,7 +137,7 @@ __pvem_unpack_python_source() {
 
     TAR_LOG_FILE=$(mktemp)
 
-    printf "%bExtracting source code%b " "${C_BLUE}" "${C_RESET}"
+    printf "%bExtracting source code%b " "$C_BLUE" "$C_RESET"
     if ! tar -zxf "$source_path" -C "$target_path" 2>"$TAR_LOG_FILE"; then
         printf "\n"
 
@@ -170,7 +170,7 @@ __pvem_install_python_source() {
     INSTALL_LOG_FILE=$(mktemp)
     INSTALL_EXIT_STATUS_FILE=$(mktemp)
 
-    printf "%bInstalling Python%b " "${C_BLUE}" "${C_RESET}"
+    printf "%bInstalling Python%b\n" "$C_BLUE" "$C_RESET"
     (
         set -e
         cd "$source_path" &&

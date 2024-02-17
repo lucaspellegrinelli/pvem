@@ -19,7 +19,7 @@ _pvem_versions() {
         fi
 
         version=$(basename "$version_path")
-        printf "%b%s\n" "${C_BLUE}" "${version}"
+        printf "%b%s\n" "$C_BLUE" "${version}"
     done
 
     return 0
