@@ -5,6 +5,22 @@ C_GREEN="\033[1;32m"
 C_YELLOW="\033[1;33m"
 C_BLUE="\033[1;36m"
 
+# Function: __pvem_output_to_single_line
+# Summary: Print the live output of a command to a single line
+# Example:
+#  ping -c 25 google.com | __pvem_output_to_single_line
+__pvem_output_to_single_line() {
+    while read -r line; do
+        if [ ${#line} -gt 120 ]; then
+            echo -ne "\r\033[K${line:0:60}...${line: -60}"
+        else
+            echo -ne "\r\033[K$line"
+        fi
+    done
+
+    echo -ne "\r\033[K"
+}
+
 # Function: __pvem_check_version_could_be_valid
 # Summary: Check if a python version could be valid (X, X.X, X.X.X)
 # Parameters:

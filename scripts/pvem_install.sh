@@ -68,28 +68,63 @@ __pvem_download_and_install_version() {
 
     mkdir -p "$VERSIONPATH/tmp"
     
-    # Download python version
-    wget -q -O "$VERSIONPATH/tmp/Python-$target_version.tgz" "https://www.python.org/ftp/python/$target_version/Python-$target_version.tgz"
-    tar -zxvf "$VERSIONPATH/tmp/Python-$target_version.tgz" -C "$VERSIONPATH/tmp"
+    printf "\n"
+    printf "${C_BLUE}Downloading Python version $target_version${C_RESET} "
 
-    # Install python version in a subshell
+    WGET_LOG_FILE=$(mktemp)
+    wget -O "$VERSIONPATH/tmp/Python-$target_version.tgz" "https://www.python.org/ftp/python/$target_version/Python-$target_version.tgz" 2>$WGET_LOG_FILE
+
+    if [ $? -ne 0 ]; then
+        printf "\n"
+        tail -n 10 $WGET_LOG_FILE
+        return 1
+    fi
+
+    rm $WGET_LOG_FILE 2>/dev/null
+    printf "Done.\n"
+
+    printf "${C_BLUE}Extracting Python version $target_version${C_RESET} "
+
+    TAR_LOG_FILE=$(mktemp)
+    tar -zxf "$VERSIONPATH/tmp/Python-$target_version.tgz" -C "$VERSIONPATH/tmp" 2>$TAR_LOG_FILE
+
+    if [ $? -ne 0 ]; then
+        printf "\n"
+        tail -n 10 $TAR_LOG_FILE
+        return 1
+    fi
+
+    rm $TAR_LOG_FILE 2>/dev/null
+    printf "Done.\n"
+
+    printf "${C_BLUE}Installing Python version $target_version${C_RESET}\n"
+    INSTALL_LOG_FILE=$(mktemp)
+    INSTALL_EXIT_STATUS_FILE=$(mktemp)
     (
         set -e
         cd "$VERSIONPATH/tmp/Python-$target_version" &&
         ./configure --prefix="$VERSIONPATH/$target_version" &&
         make -j4 &&
         make install
-    )
-    
-    exit_status=$?
+        echo $? > $INSTALL_EXIT_STATUS_FILE
+    ) 2>$INSTALL_LOG_FILE | __pvem_output_to_single_line
+
+    if [ -f $INSTALL_EXIT_STATUS_FILE ]; then
+        read exit_status < $INSTALL_EXIT_STATUS_FILE
+        rm $INSTALL_EXIT_STATUS_FILE
+    else
+        exit_status=0
+    fi
 
     if [ -d "$VERSIONPATH/tmp" ]; then
         rm -rf "$VERSIONPATH/tmp"
     fi
 
     if [ $exit_status -ne 0 ]; then
+        tail -n 10 $INSTALL_LOG_FILE
         rm -rf "$VERSIONPATH/$target_version"
     fi
 
+    rm $INSTALL_LOG_FILE 2>/dev/null
     return $exit_status
 }
