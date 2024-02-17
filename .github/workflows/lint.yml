@@ -1,9 +1,6 @@
-on:
-  push:
-    branches:
-      - master
+on: push
 
-name: "Trigger: Push action"
+name: "Lint check on commit"
 permissions: {}
 
 jobs:
