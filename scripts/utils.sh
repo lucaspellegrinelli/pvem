@@ -8,29 +8,35 @@ export C_YELLOW="\033[1;33m"
 export C_BLUE="\033[1;36m"
 
 # Function: __pvem_print_command_args_error
-# Summary: Print an error message when a command is called with the wrong arguments
+# Summary: Prints an error message when a command is called with incorrect arguments.
 # Parameters:
 #   $1: Name of the command
-#   $2,3...k: Argument names
-#   $k+1, k+2...n: Argument descriptions
+#   $2,3...k: Argument names (should be half the total number of arguments)
+#   $k+1, k+2...n: Corresponding argument descriptions
 __pvem_print_command_args_error() {
-    command_name=$1
+    local command_name=$1
     shift
-    args=("$@")
-    half=$((${#args[@]} / 2))
 
-    printf "%bError: Missing arguments for '%s' function.\n" "$C_RED" "$command_name"
+    if (( $# % 2 != 0 )); then
+        echo "Error: Incorrect usage of __pvem_print_command_args_error. Arguments and descriptions must be paired."
+        return 1
+    fi
+
+    local -a args=("$@")
+    local num_args=$((${#args[@]} / 2))
+
+    printf "%bError: Missing or incorrect arguments for '%s' function.\n" "$C_RED" "$command_name"
     printf "%b\n" "$C_RESET"
     printf "Usage: pvem %s %b" "$command_name" "$C_BLUE"
 
-    for ((i = 1; i <= half; i++)); do
+    for ((i = 1; i <= num_args; i++)); do
         printf "<%s> " "${args[$i]}"
     done
 
     printf "%b\n" "$C_RESET"
 
-    for ((i = 1; i <= half; i++)); do
-        printf "  %b%-20s%b %s\n" "$C_BLUE" "<${args[$i]}>" "$C_RESET" "${args[$i + ${half}]}"
+    for ((i = 1; i <= num_args; i++)); do
+        printf "  %b%-20s%b %s\n" "$C_BLUE" "<${args[$i]}>" "$C_RESET" "${args[$i + num_args]}"
     done
 }
 
@@ -56,7 +62,7 @@ __pvem_output_to_single_line() {
 #   $1: Python version to check
 # Return: 0 if the python version could be valid, 1 otherwise
 __pvem_check_version_could_be_valid() {
-    python_version=$1
+    local python_version=$1
 
     if ! [[ "$python_version" =~ ^[0-9]+(\.[0-9]+){0,2}$ ]]; then
         return 1
@@ -71,7 +77,7 @@ __pvem_check_version_could_be_valid() {
 #  $1: Name of the virtual environment to check
 # Return: 0 if the virtual environment exists, 1 otherwise
 __pvem_check_env_exists() {
-    env_name=$1
+    local env_name=$1
 
     if [ -d "$ENVPATH/$env_name" ]; then
         return 0
@@ -86,7 +92,7 @@ __pvem_check_env_exists() {
 #   $1: Python version to check
 # Return: 0 if the python version is installed, 1 otherwise
 __pvem_check_version_installed() {
-    python_version=$1
+    local python_version=$1
 
     if [ -d "$VERSIONPATH/$python_version" ]; then
         return 0
@@ -101,14 +107,13 @@ __pvem_check_version_installed() {
 #  $1: Name of the virtual environment
 # Return: The python version of the virtual environment
 __pvem_get_env_python_version() {
-    env_name=$1
+    local env_name=$1
 
     if ! __pvem_check_env_exists "$env_name"; then
         return 1
     fi
 
-    version=$(grep -oE "version = [0-9]+\.[0-9]+\.[0-9]+" "$ENVPATH/$env_name/pyvenv.cfg" | cut -d " " -f 3)
-    echo "$version"
+    grep -oE "version = [0-9]+\.[0-9]+\.[0-9]+" "$ENVPATH/$env_name/pyvenv.cfg" | cut -d " " -f 3
 }
 
 # Function: __pvem_check_version_is_used
@@ -117,15 +122,18 @@ __pvem_get_env_python_version() {
 #  $1: Python version to check
 # Return: 0 if the python version is used, 1 otherwise
 __pvem_check_version_is_used() {
-    python_version=$1
+    local python_version=$1
+    local version
+
+    python_version=$(__pvem_find_best_matching_installed_version "$python_version")
 
     for env in "$ENVPATH"/*; do
         if ! [ -d "$env" ]; then
             continue
         fi
 
-        if [ -f "$ENVPATH/$env/pyvenv.cfg" ]; then
-            version=$(__pvem_get_env_python_version "$env")
+        if [ -f "$env/pyvenv.cfg" ]; then
+            version=$(__pvem_get_env_python_version "$(basename "$env")")
             if [ "$version" = "$python_version" ]; then
                 return 0
             fi
@@ -142,9 +150,9 @@ __pvem_check_version_is_used() {
 #  $1: Python version to check
 # Return: The best matching installed python version
 __pvem_find_best_matching_installed_version() {
-    python_version=$1
+    local python_version=$1
+    local version_list=""
 
-    version_list=""
     for version in "$VERSIONPATH"/*; do
         if ! [ -d "$version" ]; then
             continue
@@ -154,6 +162,5 @@ __pvem_find_best_matching_installed_version() {
         version_list="$version_list $version"
     done
 
-    version=$(echo "$version_list" | tr " " "\n" | grep -E "^${python_version}(?:[^0-9]|$)" | sort -V | tail -n 1)
-    echo "$version"
+    echo "$version_list" | tr " " "\n" | grep -E "^${python_version}(?:[^0-9]|$)" | sort -V | tail -n 1
 }

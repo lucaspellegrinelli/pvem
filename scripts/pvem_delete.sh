@@ -12,7 +12,7 @@ _pvem_delete() {
         return 1
     fi
 
-    env_name=$1
+    local env_name=$1
 
     if ! __pvem_check_env_exists "$env_name"; then
         printf "%bError: Virtual environment %s does not exist\n" "$C_RED" "$env_name"

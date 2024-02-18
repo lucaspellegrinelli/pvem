@@ -12,7 +12,7 @@ _pvem_install() {
         return 1
     fi
 
-    target_version=$1
+    local target_version=$1
     
     if ! __pvem_check_version_could_be_valid "$target_version"; then
         printf "%bError: Python version %s is not a valid version\n" "$C_RED" "$target_version"
@@ -21,6 +21,7 @@ _pvem_install() {
 
     # Search the python FTP server for the latest version that starts with the
     # given version (3.11 -> 3.11.8, 3.11.7 -> 3.11.7...)
+    local version
     version=$(curl -s https://www.python.org/ftp/python/ | grep -oE "[0-9]+\.[0-9]+\.[0-9]+" | grep -E "^${target_version}(?:[^0-9]|$)" | sort -V | tail -n 1)
 
     if [ -z "$version" ]; then
@@ -28,7 +29,7 @@ _pvem_install() {
         return 1
     fi
 
-    target_version=$version
+    local target_version=$version
 
     if __pvem_check_version_installed "$target_version"; then
         printf "%bError: Python version %s is already installed\n" "$C_RED" "$target_version"
@@ -65,21 +66,21 @@ __pvem_download_and_install_version() {
         rm -rf "$VERSIONPATH/tmp"
     fi
 
-    VERSION=$1
-    UNPACK_PATH="$VERSIONPATH/tmp"
-    TAR_PATH="$UNPACK_PATH/Python-$VERSION.tgz"
-    INSTALL_PATH="$VERSIONPATH/$VERSION"
+    local version=$1
+    local unpack_path="$VERSIONPATH/tmp"
+    local tar_path="$unpack_path/Python-$version.tgz"
+    local install_path="$VERSIONPATH/$version"
     
-    if ! __pvem_download_python_source "$VERSION" "$TAR_PATH"; then
+    if ! __pvem_download_python_source "$version" "$tar_path"; then
         return 1
     fi
 
-    if ! __pvem_unpack_python_source "$TAR_PATH" "$UNPACK_PATH"; then
+    if ! __pvem_unpack_python_source "$tar_path" "$unpack_path"; then
         return 1
     fi
 
-    install_exit_status=0
-    if ! __pvem_install_python_source "$UNPACK_PATH/Python-$VERSION" "$INSTALL_PATH"; then
+    local install_exit_status=0
+    if ! __pvem_install_python_source "$unpack_path/Python-$version" "$install_path"; then
         install_exit_status=1
     fi
 
@@ -97,8 +98,8 @@ __pvem_download_and_install_version() {
 #  $2: Target path for the tar source code
 # Return: 0 if the source code was downloaded, 1 otherwise
 __pvem_download_python_source() {
-    version=$1
-    target_path=$2
+    local version=$1
+    local target_path=$2
 
     WGET_LOG_FILE=$(mktemp)
 
@@ -130,9 +131,10 @@ __pvem_download_python_source() {
 #   $2: Path to extract the source code
 # Return: 0 if the source code was extracted, 1 otherwise
 __pvem_unpack_python_source() {
-    source_path=$1
-    target_path=$2
+    local source_path=$1
+    local target_path=$2
 
+    local TAR_LOG_FILE
     TAR_LOG_FILE=$(mktemp)
 
     printf "%bExtracting source code%b " "$C_BLUE" "$C_RESET"
@@ -162,9 +164,11 @@ __pvem_unpack_python_source() {
 #  $2: Path to install the source code
 # Return: 0 if the source code was installed, 1 otherwise
 __pvem_install_python_source() {
-    source_path=$1
-    target_path=$2
+    local source_path=$1
+    local target_path=$2
 
+    local INSTALL_LOG_FILE
+    local INSTALL_EXIT_STATUS_FILE
     INSTALL_LOG_FILE=$(mktemp)
     INSTALL_EXIT_STATUS_FILE=$(mktemp)
 
@@ -172,7 +176,7 @@ __pvem_install_python_source() {
     (
         set -e
         cd "$source_path" &&
-        ./configure --prefix="$target_path" --enable-optimizations &&
+        ./configure --prefix="$target_path" &&
         make -j4 &&
         make install
         echo $? > "$INSTALL_EXIT_STATUS_FILE"

@@ -8,9 +8,12 @@ _pvem_list() {
         return 1
     fi
 
-    ALL_VERSIONS_OK=1
+    local all_versions_ok=1
     printf "%-20s %-10s\n" "ENVIRONMENT" "VERSION"
+
+    local env version
     for env_path in "$ENVPATH"/*; do
+
         if ! [ -d "$env_path" ]; then
             continue
         fi
@@ -27,11 +30,11 @@ _pvem_list() {
             printf "%b%-20s %b%s\n" "$C_BLUE" "$env" "$C_GREEN" "$version"
         else
             printf "%b%-20s %b%s*\n" "$C_BLUE" "$env" "$C_RED" "$version"
-            ALL_VERSIONS_OK=0
+            all_versions_ok=0
         fi
     done
 
-    if [ $ALL_VERSIONS_OK -eq 0 ]; then
+    if [ $all_versions_ok -eq 0 ]; then
         printf "%b\n" "$C_RED"
         printf "Not all envirorments have their Python version installed. These will not work.%b\n" "$C_RESET"
         printf "Use 'pvem versions' to see all installed versions\n"

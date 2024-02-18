@@ -24,8 +24,6 @@ if ! [ -d "$VERSIONPATH" ]; then
     mkdir -p "$VERSIONPATH"
 fi
 
-. "$PVEM_PATH"/scripts/utils.sh
-
 # Source completions
 if [ -n "$ZSH_VERSION" ]; then
     . "$PVEM_PATH/completions/zsh"
@@ -43,6 +41,8 @@ pvem() {
         _pvem_help
         return 1
     fi
+
+    . "$PVEM_PATH"/scripts/utils.sh
 
     case "$1" in
         "new")

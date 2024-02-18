@@ -9,6 +9,8 @@ _pvem_versions() {
     fi
 
     printf "INSTALLED VERSIONS\n"
+
+    local version
     for version_path in "$VERSIONPATH"/*; do
         if ! [ -d "$version_path" ]; then
             continue
