@@ -53,7 +53,7 @@ _pvem_install() {
         return 1
     fi
 
-    printf "%bPython version %s installed\n" "$C_GREEN" "$target_version"
+    printf "Python version %b%s%b successfully installed\n" "$C_GREEN" "$target_version" "$C_RESET"
     return 0
 }
 
@@ -174,7 +174,7 @@ __pvem_install_python_source() {
     (
         set -e
         cd "$source_path" &&
-        ./configure --prefix="$target_path" &&
+        ./configure --prefix="$target_path" --enable-optimizations &&
         make -j4 &&
         make install
         echo $? > "$INSTALL_EXIT_STATUS_FILE"

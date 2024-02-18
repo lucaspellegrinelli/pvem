@@ -39,6 +39,6 @@ _pvem_new() {
     fi
 
     "$VERSIONPATH/$python_version/bin/python3" -m venv "$ENVPATH/$env_name"
-    printf "%bVirtual envirorment %s created\n" "$C_GREEN" "$env_name"
+    printf "Virtual envirorment %b%s%b successfully created\n" "$C_GREEN" "$env_name" "$C_RESET"
     return 0
 }

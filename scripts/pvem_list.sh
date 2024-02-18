@@ -33,7 +33,7 @@ _pvem_list() {
 
     if [ $ALL_VERSIONS_OK -eq 0 ]; then
         printf "%b\n" "$C_RED"
-        printf "Not all virtual envirorments have their Python version installed. These will not work.\n"
+        printf "Not all envirorments have their Python version installed. These will not work.%b\n" "$C_RESET"
         printf "Use 'pvem versions' to see all installed versions\n"
     fi
 

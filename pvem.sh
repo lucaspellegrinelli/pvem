@@ -26,30 +26,12 @@ fi
 
 . "$PVEM_PATH"/scripts/utils.sh
 
-# Function: _pvem_help
-# Summary: Show help message for pvem
-# Parameters: None
-_pvem_help() {
-    echo "Usage: pvem <function> [arguments]"
-    echo ""
-    echo "pvem is a tool for managing python virtual environments and python versions."
-    echo ""
-    echo "Functions:"
-    echo "  new <name> <python version>       Create a new virtual environment with the specified name and Python version."
-    echo "  install <python version>          Install the specified Python version."
-    echo "  use <name>                        Activate the virtual environment with the specified name."
-    echo "  delete <name>                     Delete the virtual environment with the specified name."
-    echo "  uninstall <python version>        Uninstall the specified Python version."
-    echo "  list                              List all available virtual environments."
-    echo "  versions                          List all installed Python versions."
-    echo "  help                              Show this help message."
-    echo ""
-    echo "Examples:"
-    echo "  pvem install 3.9                  Install Python 3.9."
-    echo "  pvem new myenv 3.9                Create a new virtual environment named 'myenv' with Python 3.9."
-    echo "  pvem use myenv                    Activate the 'myenv' virtual environment."
-    echo "  pvem delete myenv                 Delete the 'myenv' virtual environment."
-}
+# Source completions
+if [ -n "$ZSH_VERSION" ]; then
+    . "$PVEM_PATH/completions/zsh"
+elif [ -n "$BASH_VERSION" ]; then
+    . "$PVEM_PATH/completions/bash"
+fi
 
 # Function: pvem
 # Summary: Main function for pvem
@@ -103,9 +85,44 @@ pvem() {
     printf "%b" "$C_RESET"
 }
 
-# Source completions
-if [ -n "$ZSH_VERSION" ]; then
-    . "$PVEM_PATH/completions/zsh"
-elif [ -n "$BASH_VERSION" ]; then
-    . "$PVEM_PATH/completions/bash"
-fi
+# Function: _pvem_help
+# Summary: Show help message for pvem
+# Parameters: None
+_pvem_help() {
+    echo "Usage: pvem <function> [arguments]"
+    echo ""
+    echo "Functions:"
+    __pvem_print_command "new" "<name> <python version>" "Create a new virtual environment with the specified name and Python version."
+    __pvem_print_command "install" "<python version>" "Install the specified Python version."
+    __pvem_print_command "use" "<name>" "Activate the virtual environment with the specified name."
+    __pvem_print_command "delete" "<name>" "Delete the virtual environment with the specified name."
+    __pvem_print_command "uninstall" "<python version>" "Uninstall the specified Python version."
+    __pvem_print_command "list" "" "List all available virtual environments."
+    __pvem_print_command "versions" "" "List all installed Python versions."
+    __pvem_print_command "help" "" "Show this help message."
+    echo ""
+    echo "Examples:"
+    __pvem_print_example "pvem install 3.9" "Install Python 3.9."
+    __pvem_print_example "pvem new myenv 3.9" "Create a new virtual environment named 'myenv' with Python 3.9."
+    __pvem_print_example "pvem use myenv" "Activate the 'myenv' virtual environment."
+    __pvem_print_example "pvem delete myenv" "Delete the 'myenv' virtual environment."
+}
+
+# Function: __pvem_print_command
+# Summary: Print a command with its description
+# Parameters:
+#  $1: Command name
+#  $2: Command arguments
+#  $3: Command description
+__pvem_print_command() {
+    printf "  %b%-10s%b %-25s %s\n" "$C_BLUE" "$1" "$C_RESET" "$2" "$3"
+}
+
+# Function: __pvem_print_example
+# Summary: Print an example with its description
+# Parameters:
+#   $1: Example
+#   $2: Example description
+__pvem_print_example() {
+    printf "  %b%-36s%b %s\n" "$C_GREEN" "$1" "$C_RESET" "$2"
+}

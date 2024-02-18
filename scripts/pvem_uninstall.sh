@@ -48,6 +48,6 @@ _pvem_uninstall() {
     fi
 
     rm -rf "${VERSIONPATH:?}/$python_version"
-    printf "%bPython version %s uninstalled\n" "$C_GREEN" "$python_version"
+    printf "Python version %b%s%b successfully uninstalled\n" "$C_GREEN" "$python_version" "$C_RESET"
     return 0
 }

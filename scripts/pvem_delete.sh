@@ -23,6 +23,6 @@ _pvem_delete() {
     fi
 
     rm -rf "${ENVPATH:?}/$env_name"
-    printf "%bVirtual environment %s deleted\n" "$C_GREEN" "$env_name"
+    printf "Virtual environment %b%s%b successfully deleted\n" "$C_GREEN" "$env_name" "$C_RESET"
     return 0
 }
