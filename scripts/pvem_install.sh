@@ -22,7 +22,13 @@ _pvem_install() {
     # Search the python FTP server for the latest version that starts with the
     # given version (3.11 -> 3.11.8, 3.11.7 -> 3.11.7...)
     local version
-    version=$(curl -s https://www.python.org/ftp/python/ | grep -oE "[0-9]+\.[0-9]+\.[0-9]+" | grep -E "^${target_version}(?:[^0-9]|$)" | sort -V | tail -n 1)
+    version=$(
+        curl -s https://www.python.org/ftp/python/ |
+        grep -oE "[0-9]+\.[0-9]+\.[0-9]+" |
+        grep -E "^${target_version}([^0-9]|$)" |
+        sort -V |
+        tail -n 1
+    )
 
     if [ -z "$version" ]; then
         printf "%bError: Python version %s is not available\n" "$C_RED" "$target_version"
