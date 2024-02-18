@@ -1,0 +1,46 @@
+.TH PVEM 1
+.SH NAME
+pvem \- Python virtual environment manager
+.SH SYNOPSIS
+.B pvem
+[\fIFUNCTION\fR] [\fIARGUMENTS\fR]
+.SH DESCRIPTION
+pvem is a tool for managing Python virtual environments. It allows users to create, activate, delete, and manage Python installations and virtual environments.
+.SH FUNCTIONS
+.TP
+.B new <name> <python version>
+Create a new virtual environment with the specified name and Python version.
+.TP
+.B install <python version>
+Install the specified Python version.
+.TP
+.B use <name>
+Activate the virtual environment with the specified name.
+.TP
+.B delete <name>
+Delete the virtual environment with the specified name.
+.TP
+.B uninstall <python version>
+Uninstall the specified Python version.
+.TP
+.B list
+List all available virtual environments.
+.TP
+.B versions
+List all installed Python versions.
+.TP
+.B help
+Show the help message.
+.SH EXAMPLES
+.TP
+.B pvem install 3.9
+Install the latest Python 3.9 version.
+.TP
+.B pvem new myenv 3.9
+Create a new virtual environment named 'myenv' with the installed Python 3.9 version.
+.TP
+.B pvem use myenv
+Activate the 'myenv' virtual environment.
+.TP
+.B pvem delete myenv
+Delete the 'myenv' virtual environment.
