@@ -1,22 +1,22 @@
-# Python Version and Virtual Environment Manager
+# Python Version and Environment Manager
 
 This is a tool to manage locally installed python versions and barebones (`python -m venv [env]`) virtual environments using the managed versions.
 
 ![usage example](https://github.com/lucaspellegrinelli/pvem/assets/19651296/aaf86622-9652-4b79-8c41-8868bfd87e2e)
 
-## Getting Started
+## Installation
 
 Install `pvem` from the standalone installer included in this repository
 
 ### Linux / macOS
 
-#### Requirements
+There are some requirements (mainly `zlib` for compiling python) which can be installed (in debian based linux distros) with
 
-There are some requirements (mainly zlib) which can be installed (in debian based linux distros) with
+```
+apt-get install -y curl wget make gcc zlib1g-dev
+```
 
-```apt-get install -y curl wget make gcc zlib1g-dev```
-
-#### Installing
+Now to **install** or **update** pvem, you should run the install script:
 
 ```
 # Direct installation
@@ -37,6 +37,8 @@ Restart your shell and you should be good to go!
 Not supported
 
 ## Usage
+
+You can also run `pvem help` to get information on the commands inside the terminal.
 
 * `pvem install [python-version]`
 Installs a specific python version. Note that pvem doesn't use the globally installed python versions in your system, so if you have one installed and want to use it, you'll still need to install it through this command. _Examples:_ `pvem install 3.11` or `pvem install 3.11.4`
@@ -59,16 +61,13 @@ Default linux command to leave a virtual environment
 
 With docker running, you can run
 
-```make test```
+```
+# within project directory
+make test
+```
 
 This will basically run the [test.sh](https://github.com/lucaspellegrinelli/pvem/blob/main/test.sh) script inside a docker container which tests the funcionality of the commands and prints out the results
 
-## How it works
+## License
 
-In the installation folder there will be 3 things:
-
-* A file `pvem.sh` which is sourced into your shell on startup. It has the logic of the software
-* A folder `versions` which will store all the locally installed python versions pvem will use
-* A folder `envs` which will store all the virtual environments created through pvem
-
-So the idea is pretty simple, install your python versions locally in the `versions` folder using the `pvem install` command and manage the environments in the `envs` folder using the specified installed python version with the `pvem new` and `pvem use` command.
+[MIT](LICENSE)
