@@ -7,10 +7,8 @@
 # Return: 0 if the python version was uninstalled, 1 otherwise
 _pvem_uninstall() {
     if [ -z "$1" ]; then
-        printf "%bError: Missing arguments for 'uninstall' function.\n" "$C_RED"
-        printf "%b\n" "$C_RESET"
-        printf "Usage: pvem uninstall %b<python version>\n" "$C_BLUE"
-        printf "  %b<python version>%b    The version of Python to uninstall.\n" "$C_BLUE" "$C_RESET"
+        __pvem_print_command_args_error "uninstall" "python version" \
+            "The version of Python to uninstall."
         return 1
     fi
 

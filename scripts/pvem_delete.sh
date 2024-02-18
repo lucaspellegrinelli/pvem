@@ -7,10 +7,8 @@
 # Return: 0 if the virtual environment was deleted, 1 otherwise
 _pvem_delete() {
     if [ -z "$1" ]; then
-        printf "%bError: Missing arguments for 'delete' function.\n" "$C_RED"
-        printf "%b\n" "$C_RESET"
-        printf "Usage: pvem delete %b<name>\n" "$C_BLUE"
-        printf "  %b<name>%b              The name of the virtual environment to delete.\n" "$C_BLUE" "$C_RESET"
+        __pvem_print_command_args_error "delete" "name" \
+            "The name of the virtual environment to delete."
         return 1
     fi
 

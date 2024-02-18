@@ -7,6 +7,33 @@ export C_GREEN="\033[1;32m"
 export C_YELLOW="\033[1;33m"
 export C_BLUE="\033[1;36m"
 
+# Function: __pvem_print_command_args_error
+# Summary: Print an error message when a command is called with the wrong arguments
+# Parameters:
+#   $1: Name of the command
+#   $2,3...k: Argument names
+#   $k+1, k+2...n: Argument descriptions
+__pvem_print_command_args_error() {
+    command_name=$1
+    shift
+    args=("$@")
+    half=$((${#args[@]} / 2))
+
+    printf "%bError: Missing arguments for '%s' function.\n" "$C_RED" "$command_name"
+    printf "%b\n" "$C_RESET"
+    printf "Usage: pvem %s %b" "$command_name" "$C_BLUE"
+
+    for ((i = 1; i <= half; i++)); do
+        printf "<%s> " "${args[$i]}"
+    done
+
+    printf "%b\n" "$C_RESET"
+
+    for ((i = 1; i <= half; i++)); do
+        printf "  %b%-20s%b %s\n" "$C_BLUE" "<${args[$i]}>" "$C_RESET" "${args[$i + ${half}]}"
+    done
+}
+
 # Function: __pvem_output_to_single_line
 # Summary: Print the live output of a command to a single line
 # Example:

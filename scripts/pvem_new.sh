@@ -8,11 +8,9 @@
 # Return: 0 if the virtual environment was created, 1 otherwise
 _pvem_new() {
     if [ -z "$1" ] || [ -z "$2" ]; then
-        printf "%bError: Missing arguments for 'new' function.\n" "$C_RED"
-        printf "%b\n" "$C_RESET"
-        printf "Usage: pvem new %b<name> <python version>\n" "$C_BLUE"
-        printf "  %b<name>%b              The name of the virtual environment to create.\n" "$C_BLUE" "$C_RESET"
-        printf "  %b<python version>%b    The version of Python to use in the virtual environment.\n" "$C_BLUE" "$C_RESET"
+        __pvem_print_command_args_error "new" "name" "python version" \
+            "The name of the virtual environment to create." \
+            "The version of Python to use in the virtual environment."
         return 1
     fi
 
