@@ -1,5 +1,5 @@
 install:
-	@./install.sh
+	@./install.sh --local
 
 test:
 	@docker build -f test/Dockerfile.test -t pvem .

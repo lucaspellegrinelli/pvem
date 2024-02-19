@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Install pvem
-./install.sh --no-prompt > /dev/null 2> install_error.log
+./install.sh --local --no-prompt > /dev/null 2> install_error.log
 
 # Load pvem
 . ~/.pvem/pvem.sh

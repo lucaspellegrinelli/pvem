@@ -51,7 +51,11 @@ pvem() {
             ;;
         "install")
             . "$PVEM_PATH"/pvem/pvem_install.sh
-            _pvem_install "$2"
+            local enable_optimizations=false
+            if [ "$3" = "--enable-optimizations" ]; then
+                enable_optimizations=true
+            fi
+            _pvem_install "$2" "$enable_optimizations"
             ;;
         "use")
             . "$PVEM_PATH"/pvem/pvem_use.sh
@@ -73,8 +77,11 @@ pvem() {
             . "$PVEM_PATH"/pvem/pvem_versions.sh
             _pvem_versions
             ;;
-        "help")
+        "help"|"--help")
             _pvem_help
+            ;;
+        "-V"|"--version")
+            _pvem_version
             ;;
         *)
             _pvem_help
@@ -106,6 +113,13 @@ _pvem_help() {
     __pvem_print_example "pvem new myenv 3.9" "Create a new virtual environment named 'myenv' with Python 3.9."
     __pvem_print_example "pvem use myenv" "Activate the 'myenv' virtual environment."
     __pvem_print_example "pvem delete myenv" "Delete the 'myenv' virtual environment."
+}
+
+# Function: _pvem_version
+# Summary: Prints the current pvem version
+# Parameters: None
+_pvem_version() {
+    echo "v0.1.2"
 }
 
 # Function: __pvem_print_command
