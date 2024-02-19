@@ -42,3 +42,18 @@ _pvem_list() {
 
     return 0
 }
+
+# Function: __pvem_get_env_python_version
+# Summary: Get the python version of a virtual envirorment
+# Parameters:
+#  $1: Name of the virtual environment
+# Return: The python version of the virtual environment
+__pvem_get_env_python_version() {
+    local env_name=$1
+
+    if ! __pvem_check_env_exists "$env_name"; then
+        return 1
+    fi
+
+    grep -oE "version = [0-9]+\.[0-9]+\.[0-9]+" "$ENVPATH/$env_name/pyvenv.cfg" | cut -d " " -f 3
+}

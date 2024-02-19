@@ -45,9 +45,24 @@ __pvem_print_command_args_error() {
 # Example:
 #  ping -c 25 google.com | __pvem_output_to_single_line
 __pvem_output_to_single_line() {
+    local max_width
+    max_width=$(tput cols)
+
+    local target_width=$((max_width - 10))
+    if [ $target_width -gt 120 ]; then
+        target_width=120
+    fi
+
+    local half_width
+    half_width=$((target_width / 2 - 2))
+
+    if [ $half_width -lt 0 ]; then
+        half_width=0
+    fi
+
     while read -r line; do
-        if [ ${#line} -gt 120 ]; then
-            echo -ne "\r\033[K${line:0:60}...${line: -60}"
+        if [ ${#line} -gt $target_width ]; then
+            echo -ne "\r\033[K${line:0:$half_width}...${line: -$half_width}"
         else
             echo -ne "\r\033[K$line"
         fi
@@ -97,48 +112,6 @@ __pvem_check_version_installed() {
     if [ -d "$VERSIONPATH/$python_version" ]; then
         return 0
     fi
-
-    return 1
-}
-
-# Function: __pvem_get_env_python_version
-# Summary: Get the python version of a virtual envirorment
-# Parameters:
-#  $1: Name of the virtual environment
-# Return: The python version of the virtual environment
-__pvem_get_env_python_version() {
-    local env_name=$1
-
-    if ! __pvem_check_env_exists "$env_name"; then
-        return 1
-    fi
-
-    grep -oE "version = [0-9]+\.[0-9]+\.[0-9]+" "$ENVPATH/$env_name/pyvenv.cfg" | cut -d " " -f 3
-}
-
-# Function: __pvem_check_version_is_used
-# Summary: Check if a python version is used by a virtual envirorment
-# Parameters:
-#  $1: Python version to check
-# Return: 0 if the python version is used, 1 otherwise
-__pvem_check_version_is_used() {
-    local python_version=$1
-    local version
-
-    python_version=$(__pvem_find_best_matching_installed_version "$python_version")
-
-    for env in "$ENVPATH"/*; do
-        if ! [ -d "$env" ]; then
-            continue
-        fi
-
-        if [ -f "$env/pyvenv.cfg" ]; then
-            version=$(__pvem_get_env_python_version "$(basename "$env")")
-            if [ "$version" = "$python_version" ]; then
-                return 0
-            fi
-        fi
-    done
 
     return 1
 }
