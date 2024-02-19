@@ -30,13 +30,13 @@ __pvem_print_command_args_error() {
     printf "Usage: pvem %s %b" "$command_name" "$C_BLUE"
 
     for ((i = 1; i <= num_args; i++)); do
-        printf "<%s> " "${args[$i]}"
+        printf "%s " "${args[$i]}"
     done
 
     printf "%b\n" "$C_RESET"
 
     for ((i = 1; i <= num_args; i++)); do
-        printf "  %b%-20s%b %s\n" "$C_BLUE" "<${args[$i]}>" "$C_RESET" "${args[$i + num_args]}"
+        printf "  %b%-30s%b %s\n" "$C_BLUE" "${args[$i]}" "$C_RESET" "${args[$i + num_args]}"
     done
 }
 

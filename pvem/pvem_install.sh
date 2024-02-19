@@ -4,15 +4,18 @@
 # Summary: Install a new python version
 # Parameters:
 #   $1: Python version to install
+#   $2: true for enabling optimizations, false otherwise
 # Return: 0 if the python version was installed, 1 otherwise
 _pvem_install() {
     if [ -z "$1" ]; then
-        __pvem_print_command_args_error "install" "python version" \
-            "The version of Python to install."
+        __pvem_print_command_args_error "install" \
+            "version" "[--enable-optimizations]" \
+            "The version of Python to install." "(Optional) Enable optimizations when installing Python."
         return 1
     fi
 
     local target_version=$1
+    local optimizations_flag=$2
     
     if ! __pvem_check_version_could_be_valid "$target_version"; then
         printf "%bError: Python version %s is not a valid version\n" "$C_RED" "$target_version"
@@ -43,7 +46,11 @@ _pvem_install() {
         return 1
     fi
 
-    printf "%bYou are about to install Python version %s\n" "$C_YELLOW" "$target_version"
+    if [ "$optimizations_flag" = true ]; then
+        printf "%bYou are about to install Python version %s with optimizations\n" "$C_YELLOW" "$target_version"
+    else
+        printf "%bYou are about to install Python version %s\n" "$C_YELLOW" "$target_version"
+    fi
     printf "%bDo you want to continue? (Y/n) " "$C_RESET"
     read -r response
 
@@ -53,7 +60,7 @@ _pvem_install() {
     fi
 
     printf "\n"
-    if ! __pvem_download_and_install_version "$target_version"; then
+    if ! __pvem_download_and_install_version "$target_version" "$optimizations_flag"; then
         printf "%bError: Python version %s could not be installed\n" "$C_RED" "$target_version"
         return 1
     fi
@@ -66,6 +73,7 @@ _pvem_install() {
 # Summary: Download and install a new python version
 # Parameters:
 #   $1: Python version to install
+#   $2: true for enabling optimizations, false otherwise
 # Return: 0 if the python version was installed, 1 otherwise
 __pvem_download_and_install_version() {
     if [ -d "$VERSIONPATH/tmp" ]; then
@@ -73,6 +81,7 @@ __pvem_download_and_install_version() {
     fi
 
     local version=$1
+    local optimizations_flag=$2
     local unpack_path="$VERSIONPATH/tmp"
     local tar_path="$unpack_path/Python-$version.tgz"
     local install_path="$VERSIONPATH/$version"
@@ -86,7 +95,7 @@ __pvem_download_and_install_version() {
     fi
 
     local install_exit_status=0
-    if ! __pvem_install_python_source "$unpack_path/Python-$version" "$install_path"; then
+    if ! __pvem_install_python_source "$unpack_path/Python-$version" "$install_path" "$optimizations_flag"; then
         install_exit_status=1
     fi
 
@@ -168,21 +177,30 @@ __pvem_unpack_python_source() {
 # Parameters:
 #  $1: Path to the source code
 #  $2: Path to install the source code
+#  $3: true for enabling optimizations, false otherwise
 # Return: 0 if the source code was installed, 1 otherwise
 __pvem_install_python_source() {
     local source_path=$1
     local target_path=$2
+    local optimizations_flag=$3
 
     local INSTALL_LOG_FILE
     local INSTALL_EXIT_STATUS_FILE
     INSTALL_LOG_FILE=$(mktemp)
     INSTALL_EXIT_STATUS_FILE=$(mktemp)
 
-    printf "%bInstalling Python%b\n" "$C_BLUE" "$C_RESET"
+    local configure_flags=""
+    if [ "$optimizations_flag" = true ]; then
+        printf "%bInstalling Python with optimizations%b\n" "$C_BLUE" "$C_RESET"
+        configure_flags="--enable-optimizations"
+    else
+        printf "%bInstalling Python%b\n" "$C_BLUE" "$C_RESET"
+    fi
+
     (
         set -e
         cd "$source_path" &&
-        ./configure --prefix="$target_path" &&
+        ./configure --prefix="$target_path" "$configure_flags" &&
         make -j4 &&
         make install
         echo $? > "$INSTALL_EXIT_STATUS_FILE"

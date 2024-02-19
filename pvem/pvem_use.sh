@@ -15,7 +15,7 @@ _pvem_use() {
     local env_name=$1
 
     if ! __pvem_check_env_exists "$env_name"; then
-        printf "%bError: Virtual environment %s does not exist\n" "$C_RED" "$env_name"
+        printf "%bError:%b Virtual environment %b%s%b does not exist\n" "$C_RED" "$C_RESET" "$C_BLUE" "$env_name" "$C_RESET"
         printf "%bUse %b%s%b to see all available virtual environments\n" "$C_RESET" "$C_BLUE" "pvem list" "$C_RESET"
         return 1
     fi

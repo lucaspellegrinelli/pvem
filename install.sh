@@ -1,26 +1,39 @@
 #!/usr/bin/env bash
 
 _pvem_version() {
-    echo "v0.1.2"
+    echo "v0.1.3"
 }
 
-if [ ! -f pvem.sh ]; then
-    echo "pvem.sh not found. Downloading from GitHub..."
-    mkdir -p /tmp
-    wget -O /tmp/pvem-source.tar.gz -q "https://github.com/lucaspellegrinelli/pvem/archive/refs/tags/$( _pvem_version ).tar.gz"
-    tar -xf /tmp/pvem-source.tar.gz -C /tmp
-    mv "/tmp/pvem-$( _pvem_version | sed 's/v//g' )" /tmp/pvem-source
-else
-    echo "Using local pvem.sh"
+# Check which flags are set
+local_flag=false
+no_prompt_flag=false
+for arg in "$@"; do
+    if [ "$arg" = "--local" ]; then
+        local_flag=true
+    fi
+    if [ "$arg" = "--no-prompt" ]; then
+        no_prompt_flag=true
+    fi
+done
+
+# Check if --local flag is set
+if [ "$local_flag" = true ]; then
+    echo "Using local pvem source..."
     mkdir -p /tmp/pvem-source
     cp pvem.sh /tmp/pvem-source/pvem.sh
     cp -r pvem /tmp/pvem-source/pvem
     cp -r completions /tmp/pvem-source/completions
+else
+    echo "Using remote pvem source. Downloading from GitHub..."
+    mkdir -p /tmp
+    wget -O /tmp/pvem-source.tar.gz -q "https://github.com/lucaspellegrinelli/pvem/archive/refs/tags/$( _pvem_version ).tar.gz"
+    tar -xf /tmp/pvem-source.tar.gz -C /tmp
+    mv "/tmp/pvem-$( _pvem_version | sed 's/v//g' )" /tmp/pvem-source
 fi
 
 INSTALL_PATH="${HOME}/.pvem"
 
-if [ "$1" = "--no-prompt" ]; then
+if [ "$no_prompt_flag" = true ]; then
     user_path=""
 else
     read -rp "Enter installation path [${INSTALL_PATH}]: " user_path

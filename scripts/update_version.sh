@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-# Script to update the version number in README.md and install.sh
+# Script to update the version number in:
+#  - README.md
+#  - install.sh
+#  - pvem.sh
 
 # Function to display usage information
 usage() {
@@ -61,6 +64,7 @@ update_version() {
 # Update version numbers in files
 update_version "README.md"
 update_version "install.sh"
+update_version "pvem.sh"
 
 # Next steps
 # - Commit the changes

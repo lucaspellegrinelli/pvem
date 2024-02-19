@@ -8,7 +8,7 @@
 # Return: 0 if the virtual environment was created, 1 otherwise
 _pvem_new() {
     if [ -z "$1" ] || [ -z "$2" ]; then
-        __pvem_print_command_args_error "new" "name" "python version" \
+        __pvem_print_command_args_error "new" "name" "version" \
             "The name of the virtual environment to create." \
             "The version of Python to use in the virtual environment."
         return 1
