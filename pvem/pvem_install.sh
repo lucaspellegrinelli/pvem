@@ -190,11 +190,8 @@ __pvem_install_python_source() {
 
     local configure_flags=""
     if [ "$optimizations_flag" = true ]; then
-        configure_flags="--enable-optimizations"
-    fi
-
-    if [ "$optimizations_flag" = true ]; then
         printf "%bInstalling Python with optimizations%b\n" "$C_BLUE" "$C_RESET"
+        configure_flags="--enable-optimizations"
     else
         printf "%bInstalling Python%b\n" "$C_BLUE" "$C_RESET"
     fi
