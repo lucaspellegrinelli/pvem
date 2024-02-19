@@ -7,7 +7,7 @@
 # Return: 0 if the python version was uninstalled, 1 otherwise
 _pvem_uninstall() {
     if [ -z "$1" ]; then
-        __pvem_print_command_args_error "uninstall" "python version" \
+        __pvem_print_command_args_error "uninstall" "version" \
             "The version of Python to uninstall."
         return 1
     fi
@@ -15,7 +15,7 @@ _pvem_uninstall() {
     local python_version=$1
 
     if ! __pvem_check_version_could_be_valid "$python_version"; then
-        printf "%bError: Python version %s is not a valid version\n" "$C_RED" "$python_version"
+        printf "%bError:%b Python version %b%s%b is not a valid version\n" "$C_RED" "$C_RESET" "$C_BLUE" "$python_version" "$C_RESET"
         return 1
     fi
 
@@ -23,7 +23,7 @@ _pvem_uninstall() {
     version=$(__pvem_find_best_matching_installed_version "$python_version")
 
     if [ -z "$version" ]; then
-        printf "%bError: Python version %s is not installed\n" "$C_RED" "$python_version"
+        printf "%bError:%b Python version %b%s%b is not installed\n" "$C_RED" "$C_RESET" "$C_BLUE" "$python_version" "$C_RESET"
         printf "%bUse %b%s%b to see all installed versions\n" "$C_RESET" "$C_BLUE" "pvem versions" "$C_RESET"
         return 1
     fi
@@ -31,7 +31,7 @@ _pvem_uninstall() {
     local python_version=$version
 
     if ! __pvem_check_version_installed "$python_version"; then
-        printf "%bError: Python version %s is not installed\n" "$C_RED" "$python_version"
+        printf "%bError:%b Python version %b%s%b is not installed\n" "$C_RED" "$C_RESET" "$C_BLUE" "$python_version" "$C_RESET"
         printf "%bUse %b%s%b to see all installed versions\n" "$C_RESET" "$C_BLUE" "pvem versions" "$C_RESET"
         return 1
     fi

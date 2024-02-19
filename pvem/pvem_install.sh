@@ -8,8 +8,9 @@
 # Return: 0 if the python version was installed, 1 otherwise
 _pvem_install() {
     if [ -z "$1" ]; then
-        __pvem_print_command_args_error "install" "python version" \
-            "The version of Python to install."
+        __pvem_print_command_args_error "install" \
+            "version" "[--enable-optimizations]" \
+            "The version of Python to install." "(Optional) Enable optimizations when installing Python."
         return 1
     fi
 
