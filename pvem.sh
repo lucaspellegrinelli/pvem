@@ -101,12 +101,14 @@ _pvem_help() {
     echo "Functions:"
     __pvem_print_command "new" "<name> <python version>" "Create a new virtual environment with the specified name and Python version."
     __pvem_print_command "install" "<python version>" "Install the specified Python version."
+    __pvem_print_command_flag "--enable-optimizations" "Enable optimizations in Python's compilation. This will increase installation time."
     __pvem_print_command "use" "<name>" "Activate the virtual environment with the specified name."
     __pvem_print_command "delete" "<name>" "Delete the virtual environment with the specified name."
     __pvem_print_command "uninstall" "<python version>" "Uninstall the specified Python version."
     __pvem_print_command "list" "" "List all available virtual environments."
     __pvem_print_command "versions" "" "List all installed Python versions."
-    __pvem_print_command "help" "" "Show this help message."
+    __pvem_print_command "help, --help" "" "Show this help message."
+    __pvem_print_command "-V, --version" "" "Show the current pvem version."
     echo ""
     echo "Examples:"
     __pvem_print_example "pvem install 3.9" "Install Python 3.9."
@@ -129,7 +131,16 @@ _pvem_version() {
 #  $2: Command arguments
 #  $3: Command description
 __pvem_print_command() {
-    printf "  %b%-10s%b %-25s %s\n" "$C_BLUE" "$1" "$C_RESET" "$2" "$3"
+    printf "  %b%-15s%b %-25s %s\n" "$C_BLUE" "$1" "$C_RESET" "$2" "$3"
+}
+
+# Function: __pvem_print_command_flag
+# Summary: Print an optional flag for a command
+# Parameters:
+#  $1: Flag name
+#  $3: Flag description
+__pvem_print_command_flag() {
+    printf "  %-15s %-25s %s\n" "" "[$1]" "$2"
 }
 
 # Function: __pvem_print_example
