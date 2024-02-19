@@ -44,6 +44,19 @@ pvem() {
 
     . "$PVEM_PATH"/pvem/utils.sh
 
+    local command="$1"
+
+    local -a flags=()
+    local -a args=()
+
+    for arg in "${@:2}"; do
+        if [[ "$arg" == --* ]]; then
+            flags+=("$arg")
+        else
+            args+=("$arg")
+        fi
+    done
+
     case "$1" in
         "new")
             . "$PVEM_PATH"/pvem/pvem_new.sh
@@ -51,11 +64,28 @@ pvem() {
             ;;
         "install")
             . "$PVEM_PATH"/pvem/pvem_install.sh
+            export -a permitted_flags=("--enable-optimizations")
+            local max_args=1
+
+            for flag in "${flags[@]}"; do
+                if ! __pvem_check_flag_is_permitted "$flag" permitted_flags; then
+                    echo "Error: Flag $flag is not permitted for this command."
+                    return 1
+                fi
+            done
+
+            if [ "${#args[@]}" -gt "$max_args" ]; then
+                echo "Error: Too many arguments for this command."
+                return 1
+            fi
+
+            local install_version="${args[0]}"
             local enable_optimizations=false
-            if [ "$3" = "--enable-optimizations" ]; then
+            if __pvem_check_flag_is_present "--enable-optimizations" flags; then
                 enable_optimizations=true
             fi
-            _pvem_install "$2" "$enable_optimizations"
+
+            _pvem_install "$install_version" "$enable_optimizations"
             ;;
         "use")
             . "$PVEM_PATH"/pvem/pvem_use.sh
@@ -122,6 +152,32 @@ _pvem_help() {
 # Parameters: None
 _pvem_version() {
     echo "v0.1.2"
+}
+
+__pvem_check_flag_is_present() {
+    local flag="$1"
+    local -n flags_array="$2"
+
+    for f in "${flags_array[@]}"; do
+        if [ "$f" = "$flag" ]; then
+            return 0
+        fi
+    done
+
+    return 1
+}
+
+__pvem_check_flag_is_permitted() {
+    local flag="$1"
+    local -n permitted_flags_array="$2"
+
+    for f in "${permitted_flags_array[@]}"; do
+        if [ "$f" = "$flag" ]; then
+            return 0
+        fi
+    done
+
+    return 1
 }
 
 # Function: __pvem_print_command
