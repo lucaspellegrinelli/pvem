@@ -50,3 +50,30 @@ _pvem_uninstall() {
     printf "Python version %b%s%b successfully uninstalled\n" "$C_GREEN" "$python_version" "$C_RESET"
     return 0
 }
+
+# Function: __pvem_check_version_is_used
+# Summary: Check if a python version is used by a virtual envirorment
+# Parameters:
+#  $1: Python version to check
+# Return: 0 if the python version is used, 1 otherwise
+__pvem_check_version_is_used() {
+    local python_version=$1
+    local version
+
+    python_version=$(__pvem_find_best_matching_installed_version "$python_version")
+
+    for env in "$ENVPATH"/*; do
+        if ! [ -d "$env" ]; then
+            continue
+        fi
+
+        if [ -f "$env/pyvenv.cfg" ]; then
+            version=$(__pvem_get_env_python_version "$(basename "$env")")
+            if [ "$version" = "$python_version" ]; then
+                return 0
+            fi
+        fi
+    done
+
+    return 1
+}
