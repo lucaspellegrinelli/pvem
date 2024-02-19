@@ -89,9 +89,6 @@ pvem() {
                 fi
             done
 
-            echo "Installing Python $install_version"
-            echo "Enable optimizations: $enable_optimizations"
-
             _pvem_install "$install_version" "$enable_optimizations"
             ;;
         "use")
