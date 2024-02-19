@@ -60,12 +60,15 @@ pvem() {
     case "$command" in
         "new")
             . "$PVEM_PATH"/pvem/pvem_new.sh
-            _pvem_new "$2" "$3"
+            local env_name=${args[*]:0:1}
+            local env_version=${args[*]:1:1}
+            _pvem_new "$env_name" "$env_version"
             ;;
         "install")
             . "$PVEM_PATH"/pvem/pvem_install.sh
             local -a permitted_flags=("--enable-optimizations")
             local enable_optimizations=false
+            local install_version=${args[*]:0:1}
 
             for flag in "${flags[@]}"; do
                 local flag_permitted=false
@@ -86,19 +89,25 @@ pvem() {
                 fi
             done
 
-            _pvem_install "${args[@]}" "$enable_optimizations"
+            echo "Installing Python $install_version"
+            echo "Enable optimizations: $enable_optimizations"
+
+            _pvem_install "$install_version" "$enable_optimizations"
             ;;
         "use")
             . "$PVEM_PATH"/pvem/pvem_use.sh
-            _pvem_use "${args[@]}"
+            local env_name=${args[*]:0:1}
+            _pvem_use "$env_name"
             ;;
         "delete")
             . "$PVEM_PATH"/pvem/pvem_delete.sh
-            _pvem_delete "${args[@]}"
+            local env_name=${args[*]:0:1}
+            _pvem_delete "$env_name"
             ;;
         "uninstall")
             . "$PVEM_PATH"/pvem/pvem_uninstall.sh
-            _pvem_uninstall "${args[@]}"
+            local uninstall_version=${args[*]:0:1}
+            _pvem_uninstall "$uninstall_version"
             ;;
         "list")
             . "$PVEM_PATH"/pvem/pvem_list.sh
