@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 _pvem_version() {
-    echo "v0.1.1"
+    echo "v0.1.2"
 }
 
 if [ ! -f pvem.sh ]; then
@@ -14,7 +14,7 @@ else
     echo "Using local pvem.sh"
     mkdir -p /tmp/pvem-source
     cp pvem.sh /tmp/pvem-source/pvem.sh
-    cp -r scripts /tmp/pvem-source/scripts
+    cp -r pvem /tmp/pvem-source/pvem
     cp -r completions /tmp/pvem-source/completions
 fi
 
@@ -33,8 +33,8 @@ fi
 mkdir -p "${INSTALL_PATH}"
 mv /tmp/pvem-source/pvem.sh "${INSTALL_PATH}/pvem.sh"
 
-mkdir -p "${INSTALL_PATH}/scripts"
-mv /tmp/pvem-source/scripts/* "${INSTALL_PATH}/scripts"
+mkdir -p "${INSTALL_PATH}/pvem"
+mv /tmp/pvem-source/pvem/* "${INSTALL_PATH}/pvem"
 
 mkdir -p "${INSTALL_PATH}/completions"
 mv /tmp/pvem-source/completions/* "${INSTALL_PATH}/completions"

@@ -4,7 +4,7 @@
 
 When you install `pvem` a folder `~/.pvem` will be created in your system with the following:
 * A file `pvem.sh` which is sourced into your shell on startup. It is the entrypoint for the tool
-* A folder `scripts` which has the scripts for each of the commands `pvem` has
+* A folder `pvem` which has the scripts for each of the commands `pvem` has
 * A folder `completions` which has scripts for the completions for both `bash` and `zsh` which are sourced by `pvem.sh`.
 * A folder `versions` which will store all the locally installed python versions pvem will use
 * A folder `envs` which will store all the virtual environments created through pvem

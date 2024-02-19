@@ -42,35 +42,35 @@ pvem() {
         return 1
     fi
 
-    . "$PVEM_PATH"/scripts/utils.sh
+    . "$PVEM_PATH"/pvem/utils.sh
 
     case "$1" in
         "new")
-            . "$PVEM_PATH"/scripts/pvem_new.sh
+            . "$PVEM_PATH"/pvem/pvem_new.sh
             _pvem_new "$2" "$3"
             ;;
         "install")
-            . "$PVEM_PATH"/scripts/pvem_install.sh
+            . "$PVEM_PATH"/pvem/pvem_install.sh
             _pvem_install "$2"
             ;;
         "use")
-            . "$PVEM_PATH"/scripts/pvem_use.sh
+            . "$PVEM_PATH"/pvem/pvem_use.sh
             _pvem_use "$2"
             ;;
         "delete")
-            . "$PVEM_PATH"/scripts/pvem_delete.sh
+            . "$PVEM_PATH"/pvem/pvem_delete.sh
             _pvem_delete "$2"
             ;;
         "uninstall")
-            . "$PVEM_PATH"/scripts/pvem_uninstall.sh
+            . "$PVEM_PATH"/pvem/pvem_uninstall.sh
             _pvem_uninstall "$2"
             ;;
         "list")
-            . "$PVEM_PATH"/scripts/pvem_list.sh
+            . "$PVEM_PATH"/pvem/pvem_list.sh
             _pvem_list
             ;;
         "versions")
-            . "$PVEM_PATH"/scripts/pvem_versions.sh
+            . "$PVEM_PATH"/pvem/pvem_versions.sh
             _pvem_versions
             ;;
         "help")
