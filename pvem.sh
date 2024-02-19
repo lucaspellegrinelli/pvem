@@ -66,7 +66,6 @@ pvem() {
             . "$PVEM_PATH"/pvem/pvem_install.sh
             local -a permitted_flags=("--enable-optimizations")
             local enable_optimizations=false
-            local install_version="${args[1]}"
 
             for flag in "${flags[@]}"; do
                 local flag_permitted=false
@@ -87,22 +86,19 @@ pvem() {
                 fi
             done
 
-            _pvem_install "$install_version" "$enable_optimizations"
+            _pvem_install "${args[@]}" "$enable_optimizations"
             ;;
         "use")
             . "$PVEM_PATH"/pvem/pvem_use.sh
-            local env_name="${args[1]}"
-            _pvem_use "$env_name"
+            _pvem_use "${args[@]}"
             ;;
         "delete")
             . "$PVEM_PATH"/pvem/pvem_delete.sh
-            local env_name="${args[1]}"
-            _pvem_delete "$env_name"
+            _pvem_delete "${args[@]}"
             ;;
         "uninstall")
             . "$PVEM_PATH"/pvem/pvem_uninstall.sh
-            local uninstall_version="${args[1]}"
-            _pvem_uninstall "$uninstall_version"
+            _pvem_uninstall "${args[@]}"
             ;;
         "list")
             . "$PVEM_PATH"/pvem/pvem_list.sh
