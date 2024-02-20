@@ -10,10 +10,10 @@ Install `pvem` from the standalone installer included in this repository
 
 ### Linux / macOS
 
-There are some requirements which can be installed (in debian based linux distros) with
+There are some requirements necessary for downloading and compiling Python which can be installed (in debian based linux distros) with
 
 ```
-apt-get install -y curl wget make gcc zlib1g-dev libssl-dev
+apt-get install -y curl wget make gcc zlib1g-dev libssl-dev libffi-dev
 ```
 
 Now to **install** or **update** pvem, you should run the install script:
