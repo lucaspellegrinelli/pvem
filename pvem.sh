@@ -159,7 +159,7 @@ _pvem_help() {
 # Summary: Prints the current pvem version
 # Parameters: None
 _pvem_version() {
-    echo "v0.1.3"
+    echo "v0.1.4"
 }
 
 # Function: __pvem_print_command

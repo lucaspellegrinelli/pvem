@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 _pvem_version() {
-    echo "v0.1.3"
+    echo "v0.1.4"
 }
 
 # Check which flags are set

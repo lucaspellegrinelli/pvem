@@ -20,10 +20,10 @@ Now to **install** or **update** pvem, you should run the install script:
 
 ```
 # Direct installation
-curl -LsSf https://raw.githubusercontent.com/lucaspellegrinelli/pvem/v0.1.3/install.sh | sh
+curl -LsSf https://raw.githubusercontent.com/lucaspellegrinelli/pvem/v0.1.4/install.sh | sh
 
 # ... or via manual download
-wget https://raw.githubusercontent.com/lucaspellegrinelli/pvem/v0.1.3/install.sh
+wget https://raw.githubusercontent.com/lucaspellegrinelli/pvem/v0.1.4/install.sh
 chmod +x install.sh
 ./install.sh
 ```
