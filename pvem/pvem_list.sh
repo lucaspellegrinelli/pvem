@@ -11,9 +11,12 @@ _pvem_list() {
     local all_versions_ok=1
     printf "%-20s %-10s\n" "ENVIRONMENT" "VERSION"
 
+    if ! [ "$(ls -A "$ENVPATH")" ]; then
+        return 0
+    fi
+
     local env version
     for env_path in "$ENVPATH"/*; do
-
         if ! [ -d "$env_path" ]; then
             continue
         fi

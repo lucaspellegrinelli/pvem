@@ -10,6 +10,10 @@ _pvem_versions() {
 
     printf "INSTALLED VERSIONS\n"
 
+    if ! [ "$(ls -A "$VERSIONPATH")" ]; then
+        return 0
+    fi
+
     local version
     for version_path in "$VERSIONPATH"/*; do
         if ! [ -d "$version_path" ]; then

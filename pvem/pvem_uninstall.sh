@@ -62,6 +62,10 @@ __pvem_check_version_is_used() {
 
     python_version=$(__pvem_find_best_matching_installed_version "$python_version")
 
+    if ! [ "$(ls -A "$ENVPATH")" ]; then
+        return 1
+    fi
+
     for env in "$ENVPATH"/*; do
         if ! [ -d "$env" ]; then
             continue

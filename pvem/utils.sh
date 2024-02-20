@@ -126,6 +126,10 @@ __pvem_find_best_matching_installed_version() {
     local python_version=$1
     local version_list=""
 
+    if ! [ "$(ls -A "$VERSIONPATH")" ]; then
+        return
+    fi
+
     for version in "$VERSIONPATH"/*; do
         if ! [ -d "$version" ]; then
             continue
